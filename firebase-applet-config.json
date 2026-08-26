@@ -1,12 +1,9 @@
 {
-  "projectId": "liquid-pager-jn96h",
-  "appId": "1:671337291249:web:a963cf07021ed7df70b850",
-  "apiKey": "AIzaSyDqrxgGtgXF6vojgXw6VQwCJU8Jn4r4mP0",
-  "authDomain": "liquid-pager-jn96h.firebaseapp.com",
-  "firestoreDatabaseId": "ai-studio-lauraluzabeauty-e78c5fc8-643c-4ced-b4ac-7e9fa33e5e86",
-  "storageBucket": "liquid-pager-jn96h.firebasestorage.app",
-  "messagingSenderId": "671337291249",
-  "measurementId": "",
-  "oAuthClientId": "671337291249-rsemm7drretf33d5kivtbsbs9qs5vlke.apps.googleusercontent.com",
-  "recaptchaSiteKey": ""
+  "projectId": "laura-luiza-beauty-studio",
+  "appId": "1:412414084452:web:280d8e369b0e9e088ea671",
+  "apiKey": "AIzaSyDzjznPTAn4VACMPQkCFTzJpP6iBK05ToY",
+  "authDomain": "laura-luiza-beauty-studio.firebaseapp.com",
+  "storageBucket": "laura-luiza-beauty-studio.firebasestorage.app",
+  "messagingSenderId": "412414084452",
+  "measurementId": "G-KY0JQW04VJ"
 }
