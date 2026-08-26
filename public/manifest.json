@@ -1,0 +1,17 @@
+{
+  "name": "Studio Laura Rodrigues",
+  "short_name": "Studio Laura",
+  "description": "Agende seu horário no Studio Laura Rodrigues de forma rápida e fácil.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#FCF9F7",
+  "theme_color": "#9E4760",
+  "icons": [
+    {
+      "src": "/icon.svg",
+      "sizes": "192x192 512x512",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

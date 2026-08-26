@@ -1,0 +1,167 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Global Deny All by default
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // Helper functions
+    function isValidId(id) {
+      return id is string && id.size() > 0 && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
+    }
+
+    function incoming() {
+      return request.resource.data;
+    }
+
+    function existing() {
+      return resource.data;
+    }
+
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    // Role-based / Custom Claims admin check with bootstrapped admin email
+    function isAdmin() {
+      return isSignedIn() && (
+        (request.auth.token.email == 'guseletrico2005@gmail.com' && request.auth.token.email_verified == true) ||
+        request.auth.token.role == 'admin' ||
+        request.auth.token.admin == true ||
+        exists(/databases/$(database)/documents/admins/$(request.auth.uid)) ||
+        (exists(/databases/$(database)/documents/users/$(request.auth.uid)) && get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin')
+      );
+    }
+
+    function isValidService(data) {
+      return data.id is string && data.id.size() <= 128 &&
+             data.name is string && data.name.size() <= 200 &&
+             data.category in ['cabelo', 'sobrancelha', 'pes', 'tratamento', 'maquiagem', 'noiva', 'pacotes'] &&
+             data.description is string && data.description.size() <= 500 &&
+             data.price is number && data.price >= 0 &&
+             ((data.durationMinutes is number && data.durationMinutes > 0) || (data.duration is number && data.duration > 0)) &&
+             (data.isActive is bool || data.active is bool);
+    }
+
+    function isValidAppointment(data) {
+      return data.id is string && data.id.size() <= 128 &&
+             data.serviceName is string && data.serviceName.size() <= 200 &&
+             data.date is string && data.date.size() <= 30 &&
+             data.time is string && data.time.size() <= 10 &&
+             data.clientName is string && data.clientName.size() <= 200 &&
+             data.clientPhone is string && data.clientPhone.size() <= 50 &&
+             data.price is number && data.price >= 0 &&
+             data.status in ['Confirmado', 'Concluído', 'Cancelado'] &&
+             data.userId is string && data.userId.size() <= 128;
+    }
+
+    // BookedSlot strictly contains only availability fields (No client PII, no userId, no sensitive client info)
+    function isValidBookedSlot(data) {
+      return data.id is string && data.id.size() <= 128 &&
+             data.date is string && data.date.size() <= 30 &&
+             data.time is string && data.time.size() <= 10 &&
+             data.professional is string && data.professional.size() <= 128 &&
+             data.isBooked is bool &&
+             data.appointmentId is string && data.appointmentId.size() <= 128 &&
+             (!('clientName' in data)) &&
+             (!('clientEmail' in data)) &&
+             (!('clientPhone' in data)) &&
+             (!('userId' in data)) &&
+             (!('notes' in data));
+    }
+
+    function isValidProfessional(data) {
+      return data.id is string && data.id.size() <= 128 &&
+             data.name is string && data.name.size() <= 200 &&
+             data.role is string && data.role.size() <= 200 &&
+             (data.isActive is bool || data.active is bool);
+    }
+
+    function isValidUser(data) {
+      return data.id is string && data.id.size() <= 128 &&
+             data.name is string && data.name.size() <= 200 &&
+             (!('email' in data) || (data.email is string && data.email.size() <= 200)) &&
+             (!('phone' in data) || (data.phone is string && data.phone.size() <= 50)) &&
+             (!('role' in data) || data.role in ['client', 'admin']);
+    }
+
+    // 1. Services Catalog Collection:
+    // Read is public; modification (price, name, desc, photo, etc.) strictly restricted to salon administrator
+    match /services/{serviceId} {
+      allow read: if true;
+      allow create, update: if isValidId(serviceId) && isValidService(incoming()) && isAdmin();
+      allow delete: if isAdmin();
+    }
+
+    // 2. Professionals & Working Hours Collection:
+    // Read is public for availability and booking; creation, updating and deletion strictly restricted to salon administrator
+    match /professionals/{professionalId} {
+      allow read: if true;
+      allow create, update: if isValidId(professionalId) && isValidProfessional(incoming()) && isAdmin();
+      allow delete: if isAdmin();
+    }
+
+    // 3. Appointments Collection:
+    // Requires authenticated client (or admin). userId must match the authenticated user UID.
+    // Client can only view/cancel own appointments. Admin has full access.
+    match /appointments/{appointmentId} {
+      allow read: if isAdmin() || (
+        isSignedIn() && (
+          (resource.data.userId != null && resource.data.userId == request.auth.uid) ||
+          (resource.data.clientEmail != null && resource.data.clientEmail == request.auth.token.email)
+        )
+      );
+      allow create: if isSignedIn() && isValidId(appointmentId) && isValidAppointment(incoming()) && (
+        isAdmin() || incoming().userId == request.auth.uid
+      );
+      allow update: if isValidId(appointmentId) && isValidAppointment(incoming()) && (
+        isAdmin() || (
+          isSignedIn() && resource.data.userId == request.auth.uid && incoming().diff(existing()).affectedKeys().hasOnly(['status'])
+        )
+      );
+      allow delete: if isAdmin();
+    }
+
+    // 4. Booked Slots Collection (Availability Matrix & Double-Booking Prevention):
+    // Read is public so all authenticated and prospective views see real-time availability without exposing client identities.
+    // Creation is atomic during appointment scheduling, containing only slot parameters and appointmentId reference.
+    match /booked_slots/{slotId} {
+      allow read: if true;
+      allow create: if isSignedIn() && isValidId(slotId) && isValidBookedSlot(incoming()) && incoming().isBooked == true && (
+        isAdmin() || (
+          incoming().appointmentId is string &&
+          isValidId(incoming().appointmentId) &&
+          !exists(/databases/$(database)/documents/booked_slots/$(slotId))
+        )
+      );
+      allow update: if isValidId(slotId) && isValidBookedSlot(incoming()) && isAdmin();
+      allow delete: if isAdmin() || (
+        isSignedIn() && resource.data.appointmentId is string &&
+        exists(/databases/$(database)/documents/appointments/$(resource.data.appointmentId)) &&
+        get(/databases/$(database)/documents/appointments/$(resource.data.appointmentId)).data.userId == request.auth.uid
+      );
+    }
+
+    // 4. Users Collection:
+    // User profile isolation - only own user or administrator can access
+    match /users/{userId} {
+      allow read: if isSignedIn() && (request.auth.uid == userId || isAdmin());
+      allow create, update: if isSignedIn() && (request.auth.uid == userId || isAdmin()) && isValidId(userId) && isValidUser(incoming());
+      allow delete: if isAdmin();
+    }
+
+    // 5. Admins Collection:
+    // Verified administrator registry
+    match /admins/{adminId} {
+      allow read: if isSignedIn();
+      allow write: if isAdmin();
+    }
+
+    // 6. Connection Healthcheck
+    match /test/{testId} {
+      allow read, write: if true;
+    }
+  }
+}

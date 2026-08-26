@@ -1,0 +1,131 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Laura Luíza Beauty Salon Database Blueprint",
+  "description": "Estrutura do banco de dados Cloud Firestore com isolamento de dados pessoais e prevenção de concorrência",
+  "entities": {
+    "Service": {
+      "title": "Service",
+      "description": "Procedimento ou pacote de beleza oferecido pelo salão",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "maxLength": 128 },
+        "name": { "type": "string", "maxLength": 200 },
+        "category": { "type": "string", "enum": ["cabelo", "sobrancelha", "pes", "tratamento", "maquiagem", "noiva", "pacotes"] },
+        "description": { "type": "string", "maxLength": 500 },
+        "price": { "type": "number", "minimum": 0 },
+        "duration": { "type": "integer", "minimum": 1 },
+        "durationMinutes": { "type": "integer", "minimum": 1 },
+        "durationFormatted": { "type": "string", "maxLength": 50 },
+        "image": { "type": "string", "maxLength": 500 },
+        "isPopular": { "type": "boolean" },
+        "active": { "type": "boolean" },
+        "isActive": { "type": "boolean" },
+        "createdAt": { "type": "string", "maxLength": 50 },
+        "updatedAt": { "type": "string", "maxLength": 50 }
+      },
+      "required": ["id", "name", "category", "price", "durationMinutes", "isActive"]
+    },
+    "Appointment": {
+      "title": "Appointment",
+      "description": "Agendamento reservado pelo cliente",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "maxLength": 128 },
+        "serviceId": { "type": "string", "maxLength": 128 },
+        "serviceName": { "type": "string", "maxLength": 200 },
+        "serviceImage": { "type": "string", "maxLength": 500 },
+        "date": { "type": "string", "maxLength": 20 },
+        "dateFormatted": { "type": "string", "maxLength": 50 },
+        "time": { "type": "string", "maxLength": 10 },
+        "professional": { "type": "string", "maxLength": 128 },
+        "clientName": { "type": "string", "maxLength": 200 },
+        "clientPhone": { "type": "string", "maxLength": 50 },
+        "clientEmail": { "type": "string", "maxLength": 200 },
+        "price": { "type": "number", "minimum": 0 },
+        "status": { "type": "string", "enum": ["Confirmado", "Concluído", "Cancelado"] },
+        "notes": { "type": "string", "maxLength": 500 },
+        "createdAt": { "type": "string", "maxLength": 50 },
+        "userId": { "type": "string", "maxLength": 128 }
+      },
+      "required": ["id", "serviceName", "date", "time", "clientName", "clientPhone", "price", "status"]
+    },
+    "BookedSlot": {
+      "title": "BookedSlot",
+      "description": "Registro anônimo de ocupação de horário para controle de disponibilidade e prevenção de concorrência",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "maxLength": 128 },
+        "date": { "type": "string", "maxLength": 20 },
+        "time": { "type": "string", "maxLength": 10 },
+        "professional": { "type": "string", "maxLength": 128 },
+        "appointmentId": { "type": "string", "maxLength": 128 },
+        "isBooked": { "type": "boolean" },
+        "createdAt": { "type": "string", "maxLength": 50 }
+      },
+      "required": ["id", "date", "time", "professional", "isBooked", "appointmentId"]
+    },
+    "User": {
+      "title": "User",
+      "description": "Perfil de cliente ou administrador",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "maxLength": 128 },
+        "name": { "type": "string", "maxLength": 200 },
+        "email": { "type": "string", "maxLength": 200 },
+        "phone": { "type": "string", "maxLength": 50 },
+        "role": { "type": "string", "enum": ["client", "admin"] },
+        "createdAt": { "type": "string", "maxLength": 50 },
+        "lastLogin": { "type": "string", "maxLength": 50 },
+        "updatedAt": { "type": "string", "maxLength": 50 }
+      },
+      "required": ["id", "name"]
+    },
+    "Professional": {
+      "title": "Professional",
+      "description": "Profissional do salão com disponibilidade semanal e exceções de folga",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "maxLength": 128 },
+        "name": { "type": "string", "maxLength": 200 },
+        "role": { "type": "string", "maxLength": 200 },
+        "avatar": { "type": "string", "maxLength": 500 },
+        "rating": { "type": "number", "minimum": 0, "maximum": 5 },
+        "reviewsCount": { "type": "integer", "minimum": 0 },
+        "specialties": { "type": "array", "items": { "type": "string" } },
+        "active": { "type": "boolean" },
+        "isActive": { "type": "boolean" },
+        "weeklySchedule": { "type": "object" },
+        "exceptions": { "type": "array", "items": { "type": "object" } },
+        "createdAt": { "type": "string", "maxLength": 50 },
+        "updatedAt": { "type": "string", "maxLength": 50 }
+      },
+      "required": ["id", "name", "role", "isActive", "weeklySchedule"]
+    }
+  },
+  "firestore": {
+    "/services/{serviceId}": {
+      "schema": "Service",
+      "description": "Catálogo de procedimentos e pacotes de beleza disponíveis para agendamento"
+    },
+    "/professionals/{professionalId}": {
+      "schema": "Professional",
+      "description": "Cadastro de profissionais da equipe com jornadas de trabalho e horários"
+    },
+    "/appointments/{appointmentId}": {
+      "schema": "Appointment",
+      "description": "Agendamentos de clientes com detalhes do procedimento, horário e status"
+    },
+    "/booked_slots/{slotId}": {
+      "schema": "BookedSlot",
+      "description": "Horários bloqueados para evitar reservas duplicadas sem expor PII dos clientes"
+    },
+    "/users/{userId}": {
+      "schema": "User",
+      "description": "Perfis de usuários e clientes cadastrados"
+    },
+    "/admins/{adminId}": {
+      "schema": "User",
+      "description": "Documentos de referência para verificação de administradores do salão"
+    }
+  }
+}

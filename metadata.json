@@ -1,0 +1,6 @@
+{
+  "name": "Laura Luíza Beauty",
+  "description": "Aplicativo web moderno e elegante para o salão de beleza Laura Luíza Beauty com agendamento online, catálogo de serviços e painel administrativo.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
