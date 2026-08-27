@@ -21,166 +21,11 @@ export const SALON_INFO: SalonInfo = {
 /**
  * Catálogo inicial de serviços.
  *
- * IMPORTANTE:
  * Os serviços não utilizam imagens na nova apresentação.
- * O campo image permanece vazio apenas para manter compatibilidade
+ * O campo image permanece vazio para manter compatibilidade
  * com o restante do sistema.
  */
 export const INITIAL_SERVICES: Service[] = [
-
-  // ============================================================
-  // BOTOX CAPILAR
-  // ============================================================
-  {
-    id: 'botox-capilar',
-    name: 'Botox Capilar',
-    category: 'tratamento',
-
-    description:
-      'Tratamento capilar com opções de acordo com o comprimento e a necessidade dos fios.',
-
-    fullDescription:
-      'Botox capilar realizado de acordo com o comprimento do cabelo, proporcionando cuidado, alinhamento e melhora da aparência dos fios.',
-
-    // Valor padrão / inicial
-    price: 180,
-
-    durationMinutes: 180,
-    durationFormatted: '2h30 a 3h',
-
-    options: [
-      {
-        name: 'Somente raiz',
-        price: 180,
-        durationMinutes: 150,
-        durationFormatted: '2h30'
-      },
-      {
-        name: 'Cabelo curto',
-        price: 180,
-        durationMinutes: 150,
-        durationFormatted: '2h30'
-      },
-      {
-        name: 'Cabelo médio',
-        price: 230,
-        durationMinutes: 165,
-        durationFormatted: '2h45'
-      },
-      {
-        name: 'Cabelo longo',
-        price: 280,
-        durationMinutes: 180,
-        durationFormatted: '3h'
-      }
-    ],
-
-    image: '',
-    isActive: true,
-    active: true,
-    popular: true,
-
-    highlights: [
-      'Somente raiz — R$ 180,00',
-      'Cabelo curto — R$ 180,00',
-      'Cabelo médio — R$ 230,00',
-      'Cabelo longo — R$ 280,00',
-      'Tempo estimado: 2h30 a 3h'
-    ]
-  },
-
-  // ============================================================
-  // HIDRATAÇÃO
-  // ============================================================
-  {
-    id: 'hidratacao',
-    name: 'Hidratação',
-    category: 'tratamento',
-
-    description:
-      'Tratamento de hidratação para cuidar dos fios e melhorar sua aparência.',
-
-    fullDescription:
-      'Hidratação capilar realizada de acordo com o comprimento dos cabelos, proporcionando cuidado e tratamento dos fios.',
-
-    price: 60,
-
-    durationMinutes: 90,
-    durationFormatted: '1h30',
-
-    options: [
-      {
-        name: 'Cabelo curto',
-        price: 60,
-        durationMinutes: 90,
-        durationFormatted: '1h30'
-      },
-      {
-        name: 'Cabelo médio',
-        price: 80,
-        durationMinutes: 90,
-        durationFormatted: '1h30'
-      },
-      {
-        name: 'Cabelo longo',
-        price: 100,
-        durationMinutes: 90,
-        durationFormatted: '1h30'
-      }
-    ],
-
-    image: '',
-    isActive: true,
-    active: true,
-    popular: false,
-
-    highlights: [
-      'Cabelo curto — a partir de R$ 60,00',
-      'Cabelo médio — a partir de R$ 80,00',
-      'Cabelo longo — a partir de R$ 100,00',
-      'Tempo estimado: 1h30'
-    ]
-  },
-
-  // ============================================================
-  // CRONOGRAMA CAPILAR
-  // ============================================================
-  {
-    id: 'cronograma-capilar',
-    name: 'Cronograma Capilar',
-    category: 'tratamento',
-
-    description:
-      'Tratamento completo para cuidar dos cabelos em três sessões.',
-
-    fullDescription:
-      'Cronograma capilar com direito a três sessões de cuidados para tratar e manter os fios.',
-
-    price: 300,
-
-    durationMinutes: 90,
-    durationFormatted: '1h30 por sessão',
-
-    options: [
-      {
-        name: '3 sessões',
-        price: 300,
-        durationMinutes: 90,
-        durationFormatted: '1h30 por sessão'
-      }
-    ],
-
-    image: '',
-    isActive: true,
-    active: true,
-    popular: true,
-
-    highlights: [
-      'R$ 300,00',
-      'Direito a 3 sessões',
-      'Tempo estimado: 1h30 por sessão'
-    ]
-  },
 
   // ============================================================
   // PRODUÇÃO COMPLETA
@@ -191,10 +36,10 @@ export const INITIAL_SERVICES: Service[] = [
     category: 'maquiagem',
 
     description:
-      'Cabelo + maquiagem para uma produção completa.',
+      'Produção completa com penteado e maquiagem.',
 
     fullDescription:
-      'Produção completa reunindo cabelo e maquiagem em um único atendimento.',
+      'Produção completa reunindo penteado e maquiagem em um único atendimento.',
 
     price: 260,
 
@@ -203,7 +48,7 @@ export const INITIAL_SERVICES: Service[] = [
 
     options: [
       {
-        name: 'Cabelo + maquiagem',
+        name: 'Penteado + maquiagem',
         price: 260,
         durationMinutes: 120,
         durationFormatted: '2h'
@@ -216,7 +61,7 @@ export const INITIAL_SERVICES: Service[] = [
     popular: true,
 
     highlights: [
-      'Cabelo + maquiagem',
+      'Penteado + maquiagem',
       'R$ 260,00',
       'Tempo estimado: 2h'
     ]
@@ -231,7 +76,7 @@ export const INITIAL_SERVICES: Service[] = [
     category: 'maquiagem',
 
     description:
-      'Maquiagem para diferentes ocasiões.',
+      'Maquiagem personalizada para diferentes ocasiões.',
 
     fullDescription:
       'Maquiagem personalizada para valorizar a beleza da cliente de acordo com a ocasião e preferência.',
@@ -426,10 +271,10 @@ export const INITIAL_SERVICES: Service[] = [
     category: 'cabelo',
 
     description:
-      'Escova para diferentes comprimentos de cabelo.',
+      'Escova para diferentes tipos e comprimentos de cabelo.',
 
     fullDescription:
-      'Escova realizada de acordo com o comprimento do cabelo.',
+      'Escova realizada de acordo com o cabelo da cliente.',
 
     price: 50,
 
@@ -442,18 +287,6 @@ export const INITIAL_SERVICES: Service[] = [
         price: 50,
         durationMinutes: 60,
         durationFormatted: '1h'
-      },
-      {
-        name: 'Cabelo médio',
-        price: 80,
-        durationMinutes: 60,
-        durationFormatted: '1h'
-      },
-      {
-        name: 'Cabelo longo',
-        price: 100,
-        durationMinutes: 60,
-        durationFormatted: '1h'
       }
     ],
 
@@ -464,9 +297,160 @@ export const INITIAL_SERVICES: Service[] = [
 
     highlights: [
       'A partir de R$ 50,00',
+      'Tempo estimado: 1h'
+    ]
+  },
+
+  // ============================================================
+  // HIDRATAÇÃO
+  // ============================================================
+  {
+    id: 'hidratacao',
+    name: 'Hidratação',
+    category: 'tratamento',
+
+    description:
+      'Tratamento de hidratação para cuidar dos fios.',
+
+    fullDescription:
+      'Hidratação capilar realizada de acordo com o comprimento dos cabelos, proporcionando cuidado e tratamento dos fios.',
+
+    price: 60,
+
+    durationMinutes: 90,
+    durationFormatted: '1h30',
+
+    options: [
+      {
+        name: 'Cabelo curto',
+        price: 60,
+        durationMinutes: 90,
+        durationFormatted: '1h30'
+      },
+      {
+        name: 'Cabelo médio',
+        price: 80,
+        durationMinutes: 90,
+        durationFormatted: '1h30'
+      },
+      {
+        name: 'Cabelo longo',
+        price: 100,
+        durationMinutes: 90,
+        durationFormatted: '1h30'
+      }
+    ],
+
+    image: '',
+    isActive: true,
+    active: true,
+    popular: false,
+
+    highlights: [
+      'Cabelo curto — a partir de R$ 60,00',
       'Cabelo médio — a partir de R$ 80,00',
       'Cabelo longo — a partir de R$ 100,00',
-      'Tempo estimado: 1h'
+      'Tempo estimado: 1h30'
+    ]
+  },
+
+  // ============================================================
+  // BOTOX CAPILAR
+  // ============================================================
+  {
+    id: 'botox-capilar',
+    name: 'Botox Capilar',
+    category: 'tratamento',
+
+    description:
+      'Tratamento capilar com opções de acordo com o comprimento e a necessidade dos fios.',
+
+    fullDescription:
+      'Botox capilar realizado de acordo com o comprimento do cabelo, proporcionando cuidado, alinhamento e melhora da aparência dos fios.',
+
+    price: 180,
+
+    durationMinutes: 180,
+    durationFormatted: '2h30 a 3h',
+
+    options: [
+      {
+        name: 'Somente raiz',
+        price: 180,
+        durationMinutes: 150,
+        durationFormatted: '2h30'
+      },
+      {
+        name: 'Cabelo curto',
+        price: 180,
+        durationMinutes: 150,
+        durationFormatted: '2h30'
+      },
+      {
+        name: 'Cabelo médio',
+        price: 230,
+        durationMinutes: 165,
+        durationFormatted: '2h45'
+      },
+      {
+        name: 'Cabelo longo',
+        price: 280,
+        durationMinutes: 180,
+        durationFormatted: '3h'
+      }
+    ],
+
+    image: '',
+    isActive: true,
+    active: true,
+    popular: true,
+
+    highlights: [
+      'Somente raiz — R$ 180,00',
+      'Cabelo curto — R$ 180,00',
+      'Cabelo médio — R$ 230,00',
+      'Cabelo longo — R$ 280,00',
+      'Tempo estimado: 2h30 a 3h'
+    ]
+  },
+
+  // ============================================================
+  // CRONOGRAMA CAPILAR
+  // ============================================================
+  {
+    id: 'cronograma-capilar',
+    name: 'Cronograma Capilar',
+    category: 'tratamento',
+
+    description:
+      'Tratamento completo para cuidar dos cabelos em três sessões.',
+
+    fullDescription:
+      'Cronograma capilar com três sessões de cuidados para tratar e manter os fios.',
+
+    price: 300,
+
+    durationMinutes: 90,
+    durationFormatted: '1h30 por sessão',
+
+    options: [
+      {
+        name: '3 sessões',
+        price: 300,
+        durationMinutes: 90,
+        durationFormatted: '1h30 por sessão'
+      }
+    ],
+
+    image: '',
+    isActive: true,
+    active: true,
+    popular: true,
+
+    highlights: [
+      'R$ 300,00',
+      'Direito a 3 sessões',
+      'Tempo estimado: 1h30 por sessão'
     ]
   },
 
@@ -590,9 +574,6 @@ export const PROFESSIONALS: Professional[] = [
     reviewsCount: 0,
 
     specialties: [
-      'Botox Capilar',
-      'Hidratação',
-      'Cronograma Capilar',
       'Produção Completa',
       'Maquiagem',
       'Penteado',
@@ -600,6 +581,9 @@ export const PROFESSIONALS: Professional[] = [
       'Sobrancelha com Henna',
       'Sobrancelha + Buço',
       'Escova',
+      'Hidratação',
+      'Botox Capilar',
+      'Cronograma Capilar',
       'Coloração'
     ],
 
@@ -667,7 +651,7 @@ export const PROFESSIONALS: Professional[] = [
 
     createdAt: '2026-08-01T00:00:00Z',
 
-    updatedAt: '2026-08-26T00:00:00Z'
+    updatedAt: '2026-08-27T00:00:00Z'
   }
 ];
 
@@ -702,9 +686,13 @@ export const AVAILABLE_TIME_SLOTS = [
 
 /**
  * Get DayOfWeekKey from standard Javascript Date day
+ *
  * 0 = Domingo
  * 1 = Segunda
- * ...
+ * 2 = Terça
+ * 3 = Quarta
+ * 4 = Quinta
+ * 5 = Sexta
  * 6 = Sábado
  */
 export function getDayOfWeekKey(
