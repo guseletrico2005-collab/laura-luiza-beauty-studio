@@ -1,5 +1,13 @@
 import React, { useEffect, useState } from 'react';
-import { X, Clock, Calendar, CheckCircle2 } from 'lucide-react';
+import {
+  X,
+  Clock,
+  Calendar,
+  CheckCircle2,
+  Sparkles,
+  Shield,
+  ChevronDown,
+} from 'lucide-react';
 import { Service, ServiceOption } from '../types';
 
 interface ServiceDetailModalProps {
@@ -18,13 +26,12 @@ export const ServiceDetailModal: React.FC<ServiceDetailModalProps> = ({
   const [selectedOption, setSelectedOption] =
     useState<ServiceOption | null>(null);
 
+  /*
+   * Sempre que outro serviço for aberto,
+   * selecionamos automaticamente a primeira opção.
+   */
   useEffect(() => {
-    if (!service) {
-      setSelectedOption(null);
-      return;
-    }
-
-    if (service.options && service.options.length > 0) {
+    if (service?.options && service.options.length > 0) {
       setSelectedOption(service.options[0]);
     } else {
       setSelectedOption(null);
@@ -33,10 +40,11 @@ export const ServiceDetailModal: React.FC<ServiceDetailModalProps> = ({
 
   if (!isOpen || !service) return null;
 
-  const hasOptions =
-    Array.isArray(service.options) &&
-    service.options.length > 0;
-
+  /*
+   * Se existir uma opção selecionada,
+   * usamos preço e duração dela.
+   * Caso contrário, usamos os dados principais do serviço.
+   */
   const currentPrice =
     selectedOption?.price ?? service.price;
 
@@ -49,43 +57,20 @@ export const ServiceDetailModal: React.FC<ServiceDetailModalProps> = ({
     currency: 'BRL',
   }).format(currentPrice);
 
-  const handleBook = () => {
-    /*
-     * O serviço continua sendo enviado para o fluxo atual.
-     *
-     * A opção escolhida fica armazenada temporariamente
-     * no objeto enviado para o próximo passo.
-     */
-    const serviceToBook: Service = {
-      ...service,
-
-      price: currentPrice,
-
-      duration:
-        selectedOption?.durationMinutes ??
-        service.duration,
-
-      durationMinutes:
-        selectedOption?.durationMinutes ??
-        service.durationMinutes,
-
-      durationFormatted: currentDuration,
-
-      highlights: selectedOption
-        ? [
-            ...(service.highlights || []).filter(
-              (item) =>
-                !item.toLowerCase().startsWith('r$') &&
-                !item.toLowerCase().startsWith('a partir')
-            ),
-            `${selectedOption.name} — ${formattedPrice}`,
-            `Tempo estimado: ${currentDuration}`,
-          ]
-        : service.highlights,
-    };
-
-    onBook(serviceToBook);
-    onClose();
+  /*
+   * Criamos uma cópia do serviço contendo
+   * a opção escolhida para o próximo passo.
+   *
+   * Isso permite que o componente de agendamento
+   * saiba exatamente qual opção a cliente escolheu.
+   */
+  const serviceToBook: Service = {
+    ...service,
+    price: currentPrice,
+    durationMinutes:
+      selectedOption?.durationMinutes ??
+      service.durationMinutes,
+    durationFormatted: currentDuration,
   };
 
   return (
@@ -95,220 +80,297 @@ export const ServiceDetailModal: React.FC<ServiceDetailModalProps> = ({
       aria-modal="true"
       aria-labelledby="service-detail-title"
     >
-      {/* Overlay */}
+      {/* Background click overlay */}
       <div
         className="fixed inset-0"
         onClick={onClose}
         aria-hidden="true"
       />
 
-      {/* Modal */}
+      {/* Modal Card */}
       <div
         id="service-detail-modal"
         className="relative bg-white rounded-3xl overflow-hidden max-w-2xl w-full border border-[#EFE2E7] shadow-2xl z-10 animate-in zoom-in-95 duration-200 max-h-[92vh] overflow-y-auto"
       >
-        {/* Botão fechar */}
+        {/* Close Button */}
         <button
           id="modal-close-btn"
           onClick={onClose}
-          className="absolute top-4 right-4 z-20 w-10 h-10 rounded-full bg-[#351C26]/80 hover:bg-[#351C26] text-white flex items-center justify-center transition-all cursor-pointer shadow-lg"
+          className="absolute top-4 right-4 z-20 w-10 h-10 rounded-full bg-black/40 hover:bg-black/60 backdrop-blur-md text-white flex items-center justify-center transition-all cursor-pointer"
           aria-label="Fechar"
         >
           <X className="w-5 h-5" />
         </button>
 
-        {/* Cabeçalho */}
-        <div className="relative bg-gradient-to-br from-[#FAF0F3] via-white to-[#F7E7EC] px-6 sm:px-8 pt-8 pb-7 border-b border-[#EFE2E7]">
-          <div className="pr-12">
-            <span className="inline-flex items-center px-3 py-1.5 rounded-full bg-[#9E4760] text-white text-[11px] font-bold uppercase tracking-widest">
-              Laura Luíza Beauty
-            </span>
-
-            <h2
-              id="service-detail-title"
-              className="font-serif text-3xl sm:text-4xl font-bold text-[#351C26] mt-4 tracking-tight"
-            >
-              {service.name}
-            </h2>
-
-            <p className="text-sm sm:text-base text-[#6B4E58] mt-3 leading-relaxed">
-              {service.fullDescription || service.description}
-            </p>
-          </div>
-        </div>
-
-        {/* Conteúdo */}
-        <div className="p-6 sm:p-8 space-y-7">
-
-          {/* Informações principais */}
-          <div className="grid grid-cols-2 gap-3">
-            <div className="rounded-2xl bg-[#FAF1F4] border border-[#ECD3DC] p-4">
-              <div className="flex items-center gap-2 text-[#9E4760] mb-1">
-                <Clock className="w-4 h-4" />
-
-                <span className="text-[11px] uppercase tracking-wider font-bold">
-                  Duração
+        {/* Hero */}
+        <div className="relative aspect-[16/9] sm:aspect-[21/10] w-full overflow-hidden bg-[#FAF0F3]">
+          {service.image ? (
+            <img
+              src={service.image}
+              alt={service.name}
+              className="w-full h-full object-cover object-center"
+              referrerPolicy="no-referrer"
+            />
+          ) : (
+            <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-[#FAF0F3] to-[#F3DEE5]">
+              <div className="text-center">
+                <Sparkles className="w-10 h-10 text-[#9E4760] mx-auto mb-2" />
+                <span className="text-sm font-medium text-[#9E4760]">
+                  Laura Luíza Beauty
                 </span>
-              </div>
-
-              <p className="font-semibold text-[#351C26]">
-                {currentDuration}
-              </p>
-            </div>
-
-            <div className="rounded-2xl bg-[#FAF1F4] border border-[#ECD3DC] p-4">
-              <span className="block text-[11px] uppercase tracking-wider text-[#9E4760] font-bold mb-1">
-                Investimento
-              </span>
-
-              <p className="font-serif text-xl font-bold text-[#351C26]">
-                {formattedPrice}
-              </p>
-            </div>
-          </div>
-
-          {/* Escolha de opção */}
-          {hasOptions && (
-            <div className="space-y-3">
-              <div>
-                <h3 className="text-xs font-bold uppercase tracking-widest text-[#9E4760]">
-                  Escolha uma opção
-                </h3>
-
-                <p className="text-sm text-[#7A5A66] mt-1">
-                  Selecione a opção desejada para continuar.
-                </p>
-              </div>
-
-              <div className="space-y-2.5">
-                {service.options!.map((option, index) => {
-                  const isSelected =
-                    selectedOption?.name === option.name &&
-                    selectedOption?.price === option.price;
-
-                  return (
-                    <button
-                      key={`${option.name}-${index}`}
-                      type="button"
-                      onClick={() => setSelectedOption(option)}
-                      className={`w-full text-left rounded-2xl border-2 p-4 transition-all cursor-pointer ${
-                        isSelected
-                          ? 'border-[#9E4760] bg-[#FAF0F3] shadow-sm'
-                          : 'border-[#EFE2E7] bg-white hover:border-[#DCA9BA] hover:bg-[#FCF8FA]'
-                      }`}
-                    >
-                      <div className="flex items-center gap-3">
-                        {/* Radio */}
-                        <div
-                          className={`w-5 h-5 rounded-full border-2 shrink-0 flex items-center justify-center ${
-                            isSelected
-                              ? 'border-[#9E4760]'
-                              : 'border-[#CDB4BD]'
-                          }`}
-                        >
-                          {isSelected && (
-                            <div className="w-2.5 h-2.5 rounded-full bg-[#9E4760]" />
-                          )}
-                        </div>
-
-                        {/* Nome */}
-                        <div className="flex-1 min-w-0">
-                          <p
-                            className={`font-semibold text-sm sm:text-base ${
-                              isSelected
-                                ? 'text-[#9E4760]'
-                                : 'text-[#351C26]'
-                            }`}
-                          >
-                            {option.name}
-                          </p>
-
-                          <div className="flex items-center gap-2 mt-1 text-xs text-[#7A5A66]">
-                            <Clock className="w-3.5 h-3.5" />
-                            <span>
-                              {option.durationFormatted}
-                            </span>
-                          </div>
-                        </div>
-
-                        {/* Preço */}
-                        <div className="text-right shrink-0">
-                          <span className="block text-[10px] uppercase tracking-wider text-[#9E6C7C] font-semibold">
-                            Valor
-                          </span>
-
-                          <span className="font-serif text-lg font-bold text-[#351C26]">
-                            {new Intl.NumberFormat('pt-BR', {
-                              style: 'currency',
-                              currency: 'BRL',
-                            }).format(option.price)}
-                          </span>
-                        </div>
-                      </div>
-                    </button>
-                  );
-                })}
               </div>
             </div>
           )}
 
-          {/* O que está incluso */}
-          {service.highlights &&
-            service.highlights.length > 0 && (
+          <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-black/30" />
+
+          <div className="absolute bottom-4 left-6 right-6 flex items-end justify-between text-white gap-4">
+            <div>
+              <span className="px-3 py-1 rounded-full text-xs font-semibold bg-white/20 backdrop-blur-md inline-block mb-1.5">
+                Laura Luíza Beauty
+              </span>
+
+              <h2
+                id="service-detail-title"
+                className="font-serif text-2xl sm:text-3xl font-bold tracking-tight drop-shadow-sm"
+              >
+                {service.name}
+              </h2>
+            </div>
+
+            <div className="text-right shrink-0">
+              <span className="text-xs text-[#FDE7EC] block font-medium">
+                Investimento
+              </span>
+
+              <span className="font-serif text-2xl sm:text-3xl font-bold text-white">
+                {formattedPrice}
+              </span>
+            </div>
+          </div>
+        </div>
+
+        {/* Modal Body */}
+        <div className="p-6 sm:p-8 space-y-6">
+
+          {/* =====================================================
+              ESCOLHA DA OPÇÃO
+          ====================================================== */}
+          {service.options &&
+            service.options.length > 0 && (
               <div className="space-y-3">
-                <h3 className="text-xs font-bold uppercase tracking-widest text-[#9E4760]">
-                  Informações do serviço
-                </h3>
+                <div>
+                  <h4 className="text-xs font-bold uppercase tracking-widest text-[#9E4760]">
+                    Escolha uma opção
+                  </h4>
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
-                  {service.highlights.map((item, index) => (
-                    <div
-                      key={index}
-                      className="flex items-start gap-2 text-sm text-[#5C3F4B]"
-                    >
-                      <CheckCircle2 className="w-4 h-4 text-[#9E4760] shrink-0 mt-0.5" />
+                  <p className="text-sm text-[#7A5A66] mt-1">
+                    Selecione a opção desejada para este serviço.
+                  </p>
+                </div>
 
-                      <span>{item}</span>
-                    </div>
-                  ))}
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  {service.options.map((option, index) => {
+                    const isSelected =
+                      selectedOption === option;
+
+                    const optionPrice =
+                      new Intl.NumberFormat('pt-BR', {
+                        style: 'currency',
+                        currency: 'BRL',
+                      }).format(option.price);
+
+                    return (
+                      <button
+                        key={`${option.name}-${index}`}
+                        type="button"
+                        onClick={() =>
+                          setSelectedOption(option)
+                        }
+                        className={`relative text-left p-4 rounded-2xl border-2 transition-all cursor-pointer ${
+                          isSelected
+                            ? 'border-[#9E4760] bg-[#FAF0F3] shadow-md'
+                            : 'border-[#EFE2E7] bg-white hover:border-[#DCA9BA] hover:bg-[#FCF9F7]'
+                        }`}
+                      >
+                        <div className="flex items-start justify-between gap-3">
+                          <div>
+                            <p
+                              className={`text-sm font-bold ${
+                                isSelected
+                                  ? 'text-[#9E4760]'
+                                  : 'text-[#351C26]'
+                              }`}
+                            >
+                              {option.name}
+                            </p>
+
+                            <div className="flex items-center gap-1.5 mt-2 text-xs text-[#7A5A66]">
+                              <Clock className="w-3.5 h-3.5" />
+                              {option.durationFormatted}
+                            </div>
+                          </div>
+
+                          <div className="text-right shrink-0">
+                            <p className="font-serif text-lg font-bold text-[#351C26]">
+                              {optionPrice}
+                            </p>
+                          </div>
+                        </div>
+
+                        {/* Check */}
+                        <div
+                          className={`absolute top-3 right-3 w-5 h-5 rounded-full flex items-center justify-center ${
+                            isSelected
+                              ? 'bg-[#9E4760] text-white'
+                              : 'border border-[#D9BAC5] bg-white'
+                          }`}
+                        >
+                          {isSelected && (
+                            <CheckCircle2 className="w-4 h-4" />
+                          )}
+                        </div>
+                      </button>
+                    );
+                  })}
                 </div>
               </div>
             )}
 
-          {/* Pagamento */}
-          <div className="rounded-2xl bg-[#FCF9F7] border border-[#EFE2E7] p-4">
-            <p className="text-xs text-[#8E6A77]">
-              Pagamento presencial
-            </p>
+          {/* Key Specs Bar */}
+          <div className="flex flex-wrap items-center gap-3 p-4 rounded-2xl bg-[#FAF1F4] border border-[#ECD3DC]">
+            <div className="flex items-center gap-2 text-sm text-[#7A4B5B] font-medium">
+              <Clock className="w-4 h-4 text-[#9E4760]" />
 
-            <p className="text-sm font-semibold text-[#3D1E28] mt-1">
-              Cartões de crédito, débito e Pix
+              <span>
+                Duração:{' '}
+                <strong className="text-[#3D1E28]">
+                  {currentDuration}
+                </strong>
+              </span>
+            </div>
+
+            <span className="text-[#D8BAC5]">•</span>
+
+            <div className="flex items-center gap-2 text-sm text-[#7A4B5B] font-medium">
+              <Sparkles className="w-4 h-4 text-[#D4AF37]" />
+
+              <span>
+                Produtos de Linha Exclusiva
+              </span>
+            </div>
+
+            <span className="text-[#D8BAC5]">•</span>
+
+            <div className="flex items-center gap-2 text-sm text-[#7A4B5B] font-medium">
+              <Shield className="w-4 h-4 text-[#9E4760]" />
+
+              <span>
+                Garantia de Satisfação
+              </span>
+            </div>
+          </div>
+
+          {/* Detailed Description */}
+          <div className="space-y-2">
+            <h4 className="text-xs font-bold uppercase tracking-widest text-[#9E4760]">
+              Sobre o Procedimento
+            </h4>
+
+            <p className="text-sm sm:text-base text-[#523A44] leading-relaxed">
+              {service.fullDescription ||
+                service.description}
             </p>
           </div>
 
-          {/* Rodapé */}
-          <div className="pt-4 border-t border-[#F0E0E6] flex flex-col sm:flex-row gap-3">
-            <button
-              id="modal-cancel-btn"
-              type="button"
-              onClick={onClose}
-              className="w-full sm:w-auto px-6 py-3.5 rounded-2xl border border-[#D9BAC5] text-[#7A4958] text-sm font-semibold hover:bg-[#FAF1F4] transition-colors cursor-pointer"
-            >
-              Voltar
-            </button>
+          {/* Highlights */}
+          {service.highlights &&
+            service.highlights.length > 0 && (
+              <div className="space-y-3">
+                <h4 className="text-xs font-bold uppercase tracking-widest text-[#9E4760]">
+                  O que está incluso:
+                </h4>
 
-            <button
-              id="modal-book-cta-btn"
-              type="button"
-              onClick={handleBook}
-              className="w-full sm:flex-1 px-8 py-3.5 rounded-2xl bg-gradient-to-r from-[#B54E6D] to-[#9E3D59] hover:from-[#9E3D59] hover:to-[#862D45] text-white text-sm font-bold shadow-lg shadow-[#9E4760]/20 hover:shadow-xl transition-all flex items-center justify-center gap-2 cursor-pointer active:scale-[0.98]"
-            >
-              <Calendar className="w-4 h-4" />
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                  {service.highlights.map(
+                    (item, idx) => (
+                      <div
+                        key={idx}
+                        className="flex items-start gap-2 text-xs sm:text-sm text-[#5C3F4B]"
+                      >
+                        <CheckCircle2 className="w-4 h-4 text-[#9E4760] shrink-0 mt-0.5" />
 
-              <span>
-                Continuar para data e horário
-              </span>
-            </button>
+                        <span>{item}</span>
+                      </div>
+                    )
+                  )}
+                </div>
+              </div>
+            )}
+
+          {/* Selected Option Summary */}
+          {selectedOption && (
+            <div className="p-4 rounded-2xl bg-[#FCF9F7] border border-[#EFE2E7]">
+              <div className="flex items-center justify-between gap-4">
+                <div>
+                  <p className="text-[11px] uppercase tracking-wider text-[#9E6C7C] font-semibold">
+                    Opção selecionada
+                  </p>
+
+                  <p className="text-sm font-bold text-[#351C26] mt-1">
+                    {selectedOption.name}
+                  </p>
+                </div>
+
+                <div className="text-right">
+                  <p className="font-serif text-xl font-bold text-[#9E4760]">
+                    {formattedPrice}
+                  </p>
+
+                  <p className="text-xs text-[#7A5A66]">
+                    {currentDuration}
+                  </p>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Bottom Action Footer */}
+          <div className="pt-4 border-t border-[#F0E0E6] flex flex-col sm:flex-row items-center justify-between gap-4">
+            <div className="text-center sm:text-left">
+              <p className="text-xs text-[#8E6A77]">
+                Pagamento presencial ou parcelado
+              </p>
+
+              <p className="text-xs font-semibold text-[#3D1E28]">
+                Cartões de Crédito, Débito e Pix
+              </p>
+            </div>
+
+            <div className="flex items-center gap-3 w-full sm:w-auto">
+              <button
+                id="modal-cancel-btn"
+                onClick={onClose}
+                className="w-1/3 sm:w-auto px-5 py-3 rounded-2xl border border-[#D9BAC5] text-[#7A4958] text-sm font-semibold hover:bg-[#FAF1F4] transition-colors"
+              >
+                Voltar
+              </button>
+
+              <button
+                id="modal-book-cta-btn"
+                onClick={() => {
+                  onBook(serviceToBook);
+                  onClose();
+                }}
+                className="w-2/3 sm:w-auto flex-1 px-8 py-3.5 rounded-2xl bg-gradient-to-r from-[#B54E6D] to-[#9E3D59] hover:from-[#9E3D59] hover:to-[#862D45] text-white text-sm font-bold shadow-lg shadow-[#9E4760]/20 hover:shadow-xl transition-all flex items-center justify-center gap-2 cursor-pointer active:scale-98"
+              >
+                <Calendar className="w-4 h-4 text-[#FDE7EC]" />
+
+                <span>
+                  Agendar este serviço
+                </span>
+              </button>
+            </div>
           </div>
         </div>
       </div>
