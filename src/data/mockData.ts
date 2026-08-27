@@ -19,193 +19,130 @@ export const SALON_INFO: SalonInfo = {
 
 export const INITIAL_SERVICES: Service[] = [
   {
-    id: 'cabelo',
-    name: 'Cabelo',
-    category: 'cabelo',
-    description:
-      'Cuidados e serviços de cabelo personalizados para realçar sua beleza.',
-    fullDescription:
-      'Serviço de cabelo personalizado de acordo com as necessidades e preferências de cada cliente.',
-    price: 0,
-    durationMinutes: 60,
-    durationFormatted: '1h 00min',
-    image:
-      'https://images.unsplash.com/photo-1560066984-138dadb4c035?q=80&w=1000&auto=format&fit=crop',
-    isActive: true,
-    active: true,
-    popular: false,
-    highlights: [
-      'Atendimento personalizado',
-      'Produtos profissionais',
-      'Avaliação do cabelo',
-      'Finalização personalizada'
-    ]
-  },
-
- {
-    id: 'maquiagem',
-    name: 'Maquiagem',
-    category: 'maquiagem',
-    description:
-      'Maquiagem personalizada para valorizar sua beleza em qualquer ocasião.',
-    fullDescription:
-      'Maquiagem realizada de forma personalizada, considerando o estilo, ocasião e preferência de cada cliente.',
-    price: 0,
-    durationMinutes: 60,
-    durationFormatted: '1h 00min',
-    image:
-      'https://images.unsplash.com/photo-1512496015851-a90fb38ba796?q=80&w=1000&auto=format&fit=crop',
-    isActive: true,
-    active: true,
-    popular: true,
-    highlights: [
-      'Maquiagem personalizada',
-      'Preparação da pele',
-      'Produtos profissionais',
-      'Acabamento de longa duração'
-    ]
-  },
-
-   {
-    id: 'sobrancelha',
-    name: 'Sobrancelha',
-    category: 'sobrancelha',
-    description:
-      'Design de sobrancelhas para valorizar e harmonizar o olhar.',
-    fullDescription:
-      'Design personalizado de sobrancelhas levando em consideração o formato do rosto e as características naturais de cada cliente.',
-    price: 0,
-    durationMinutes: 30,
-    durationFormatted: '30 min',
-    image:
-      'https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?q=80&w=1000&auto=format&fit=crop',
-    isActive: true,
-    active: true,
-    popular: false,
-    highlights: [
-      'Design personalizado',
-      'Harmonia facial',
-      'Mapeamento das sobrancelhas',
-      'Acabamento cuidadoso'
-    ]
-  },
-   {
-    id: 'spa-dos-pes',
-    name: 'Spa dos pés',
-    category: 'pes',
-    description:
-      'Momento de relaxamento e cuidado especial para os pés.',
-    fullDescription:
-      'Experiência relaxante para cuidar dos pés, proporcionando sensação de bem-estar e conforto.',
-    price: 0,
-    durationMinutes: 50,
-    durationFormatted: '50 min',
-    image:
-      'https://images.unsplash.com/photo-1519415510236-718bdfcd89c8?q=80&w=1000&auto=format&fit=crop',
-    isActive: true,
-    active: true,
-    popular: false,
-    highlights: [
-      'Momento relaxante',
-      'Cuidados com os pés',
-      'Hidratação',
-      'Massagem relaxante'
-    ]
-  },
-
-   {
-    id: 'dia-da-noiva',
-    name: 'Dia da Noiva',
-    category: 'noiva',
-    description:
-      'Um momento especial de beleza e preparação para o grande dia.',
-    fullDescription:
-      'Experiência especial para noivas, reunindo cuidados de beleza e preparação para um dos momentos mais importantes da vida.',
-    price: 0,
-    durationMinutes: 300,
-    durationFormatted: '5h 00min',
-    image:
-      'https://images.unsplash.com/photo-1519741497674-611481863552?q=80&w=1000&auto=format&fit=crop',
-    isActive: true,
-    active: true,
-    popular: true,
-    highlights: [
-      'Atendimento personalizado',
-      'Preparação para o casamento',
-      'Cabelo',
-      'Maquiagem'
-    ]
-  },
-
-   {
-    id: 'escova-de-cabelo',
-    name: 'Escova de cabelo',
-    category: 'cabelo',
-    description:
-      'Escova personalizada com acabamento bonito e duradouro.',
-    fullDescription:
-      'Serviço de escova de cabelo com lavagem, preparação dos fios e finalização conforme a preferência da cliente.',
-    price: 0,
-    durationMinutes: 45,
-    durationFormatted: '45 min',
-    image:
-      'https://images.unsplash.com/photo-1560066984-138dadb4c035?q=80&w=1000&auto=format&fit=crop',
-    isActive: true,
-    active: true,
-    popular: true,
-    highlights: [
-      'Lavagem dos cabelos',
-      'Preparação dos fios',
-      'Escova personalizada',
-      'Finalização'
-    ]
-  },
-
-  {
     id: 'botox-capilar',
-    name: 'Botox capilar',
+    name: 'Botox Capilar',
     category: 'tratamento',
     description:
-      'Tratamento capilar para melhorar o aspecto e a aparência dos fios.',
+      'Tratamento capilar com opções para raiz e cabelo médio.',
     fullDescription:
-      'Tratamento capilar realizado de acordo com a necessidade dos fios, buscando melhorar alinhamento, hidratação e aparência.',
-    price: 0,
-    durationMinutes: 90,
-    durationFormatted: '1h 30min',
-    image:
-      'https://images.unsplash.com/photo-1527799820374-dcf8d9d4a388?q=80&w=1000&auto=format&fit=crop',
+      'Botox capilar para melhorar o alinhamento, hidratação e aparência dos fios.',
+    price: 180,
+    durationMinutes: 180,
+    durationFormatted: '2h 30min a 3h',
+    image: '',
     isActive: true,
     active: true,
     popular: true,
     highlights: [
-      'Avaliação dos fios',
-      'Tratamento personalizado',
-      'Hidratação',
-      'Alinhamento dos fios'
+      'Raiz — R$ 180,00',
+      'Cabelo médio — R$ 280,00',
+      'Tempo de atendimento: 2h30 a 3h'
     ]
   },
 
   {
-    id: 'combo-capilar',
-    name: 'Combo capilar',
-    category: 'pacotes',
+    id: 'cronograma-capilar',
+    name: 'Cronograma capilar',
+    category: 'tratamento',
     description:
-      'Combinação de cuidados capilares para uma experiência completa.',
+      'Tratamento de cuidados capilares personalizados.',
     fullDescription:
-      'Combo de serviços capilares pensado para proporcionar uma experiência completa de cuidado e beleza dos cabelos.',
-    price: 0,
-    durationMinutes: 150,
-    durationFormatted: '2h 30min',
-    image:
-      'https://images.unsplash.com/photo-1527799820374-dcf8d9d4a388?q=80&w=1000&auto=format&fit=crop',
+      'Cronograma capilar para cuidados e tratamento dos fios.',
+    price: 60,
+    durationMinutes: 90,
+    durationFormatted: '1h 30min',
+    image: '',
+    isActive: true,
+    active: true,
+    popular: false,
+    highlights: [
+      'R$ 60,00',
+      'Tempo estimado: 1h 30min'
+    ]
+  },
+
+  {
+    id: 'producao-completa',
+    name: 'Produção completa',
+    category: 'maquiagem',
+    description:
+      'Cabelo e maquiagem.',
+    fullDescription:
+      'Produção completa com cabelo e maquiagem.',
+    price: 130,
+    durationMinutes: 60,
+    durationFormatted: '1h',
+    image: '',
     isActive: true,
     active: true,
     popular: true,
     highlights: [
-      'Combinação de serviços',
-      'Cuidados capilares',
-      'Tratamento personalizado',
-      'Finalização'
+      'Cabelo e maquiagem',
+      'R$ 130,00',
+      'Tempo estimado: 1 hora'
+    ]
+  },
+
+  {
+    id: 'penteado',
+    name: 'Penteado',
+    category: 'cabelo',
+    description:
+      'Penteado para diferentes ocasiões.',
+    fullDescription:
+      'Penteado personalizado conforme o estilo e preferência da cliente.',
+    price: 40,
+    durationMinutes: 30,
+    durationFormatted: '30min',
+    image: '',
+    isActive: true,
+    active: true,
+    popular: false,
+    highlights: [
+      'R$ 40,00',
+      'Tempo estimado: 30min'
+    ]
+  },
+
+  {
+    id: 'sobrancelha-henna',
+    name: 'Sobrancelha com henna',
+    category: 'sobrancelha',
+    description:
+      'Design de sobrancelhas com aplicação de henna.',
+    fullDescription:
+      'Design de sobrancelhas com henna para realçar e definir o olhar.',
+    price: 50,
+    durationMinutes: 60,
+    durationFormatted: '1h',
+    image: '',
+    isActive: true,
+    active: true,
+    popular: false,
+    highlights: [
+      'R$ 50,00',
+      'Tempo estimado: 1 hora'
+    ]
+  },
+
+  {
+    id: 'escova',
+    name: 'Escova',
+    category: 'cabelo',
+    description:
+      'Escova para diferentes comprimentos de cabelo.',
+    fullDescription:
+      'Escova com valor conforme o comprimento do cabelo.',
+    price: 60,
+    durationMinutes: 60,
+    durationFormatted: '1h',
+    image: '',
+    isActive: true,
+    active: true,
+    popular: true,
+    highlights: [
+      'Cabelo curto — a partir de R$ 60,00',
+      'Cabelo médio — a partir de R$ 100,00'
     ]
   }
 ];
@@ -270,14 +207,12 @@ export const PROFESSIONALS: Professional[] = [
     rating: 5.0,
     reviewsCount: 0,
     specialties: [
-      'Cabelo',
-      'Maquiagem',
-      'Sobrancelha',
-      'Spa dos pés',
-      'Dia da Noiva',
-      'Escova de cabelo',
       'Botox capilar',
-      'Combo capilar'
+      'Cronograma capilar',
+      'Produção completa',
+      'Penteado',
+      'Sobrancelha com henna',
+      'Escova'
     ],
     active: true,
     isActive: true,
@@ -387,6 +322,7 @@ export function getDayOfWeekKey(dayIndex: number): DayOfWeekKey {
       return 'segunda';
   }
 }
+
 /**
  * Generate available time slots for a professional on a given date
  * considering weekly schedule, breaks, and specific day/hour exceptions.
@@ -513,8 +449,8 @@ export function getProfessionalAvailabilityForDate(
       slots.push(slotTimeStr);
     }
   }
-  
-return {
+
+  return {
     isAvailable: slots.length > 0,
     slots,
     workingHoursText: `${schedule.startTime} às ${schedule.endTime}`
