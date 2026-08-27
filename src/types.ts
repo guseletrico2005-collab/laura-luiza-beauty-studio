@@ -1,3 +1,4 @@
+```ts
 /**
  * @license
  * SPDX-License-Identifier: Apache-2.0
@@ -13,6 +14,7 @@ export interface ServiceOption {
 export interface Service {
   id: string;
   name: string;
+
   category:
     | 'cabelo'
     | 'sobrancelha'
@@ -29,7 +31,7 @@ export interface Service {
   price: number;
 
   // Opções específicas dentro do serviço
-  // Ex.: Botox: Raiz, Curto, Médio e Longo
+  // Ex.: Botox Capilar: Somente raiz, Curto, Médio e Longo
   options?: ServiceOption[];
 
   // Duração do serviço em minutos
@@ -37,8 +39,7 @@ export interface Service {
   durationMinutes: number;
   durationFormatted: string;
 
-  // Mantido para compatibilidade com o sistema atual.
-  // Os serviços podem não utilizar imagem na nova interface.
+  // Mantido para compatibilidade com o sistema atual
   image: string;
 
   active?: boolean;
@@ -62,28 +63,43 @@ export type AppointmentStatus =
 export interface Appointment {
   id: string;
 
+  // Serviço escolhido
   serviceId: string;
   serviceName: string;
+
+  // Opção específica escolhida dentro do serviço
+  // Ex.: "Cabelo médio", "Cabelo longo", "3 sessões"
+  serviceOption?: string;
+
   serviceImage: string;
 
+  // Data e horário do agendamento
   date: string; // YYYY-MM-DD
   dateFormatted: string; // DD/MM/YYYY
   time: string; // HH:MM
 
+  // Profissional responsável
   professional: string;
 
+  // Dados do cliente
   clientName: string;
   clientPhone: string;
   clientEmail: string;
 
+  // Valor final do agendamento
+  // Quando houver opção, deve ser o preço da opção escolhida
   price: number;
 
+  // Status do agendamento
   status: AppointmentStatus;
 
+  // Observações opcionais
   notes?: string;
 
+  // Data/hora de criação
   createdAt: string;
 
+  // Usuário autenticado, quando disponível
   userId?: string;
 }
 
@@ -219,3 +235,4 @@ export interface SalonInfo {
 
   openingHours: string;
 }
+```
