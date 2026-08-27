@@ -11,142 +11,509 @@ export const SALON_INFO: SalonInfo = {
   name: 'Laura Luíza Beauty',
   slogan: 'Beleza, cuidado e autoestima.',
   whatsapp: '5531997749301',
+  phone: '',
   instagram: '@lauraluizapr',
   address: 'Rua Tom Jobim, nº 375 - Bairro Alphaville',
   city: 'Timóteo - MG',
   openingHours: 'Segunda a Sábado: 09h às 21h'
 };
 
+/**
+ * Catálogo inicial de serviços.
+ *
+ * IMPORTANTE:
+ * Os serviços não utilizam imagens na nova apresentação.
+ * O campo image permanece vazio apenas para manter compatibilidade
+ * com o restante do sistema.
+ */
 export const INITIAL_SERVICES: Service[] = [
+
+  // ============================================================
+  // BOTOX CAPILAR
+  // ============================================================
   {
     id: 'botox-capilar',
     name: 'Botox Capilar',
     category: 'tratamento',
+
     description:
-      'Tratamento capilar com opções para raiz e cabelo médio.',
+      'Tratamento capilar com opções de acordo com o comprimento e a necessidade dos fios.',
+
     fullDescription:
-      'Botox capilar para melhorar o alinhamento, hidratação e aparência dos fios.',
+      'Botox capilar realizado de acordo com o comprimento do cabelo, proporcionando cuidado, alinhamento e melhora da aparência dos fios.',
+
+    // Valor padrão / inicial
     price: 180,
+
     durationMinutes: 180,
-    durationFormatted: '2h 30min a 3h',
+    durationFormatted: '2h30 a 3h',
+
+    options: [
+      {
+        name: 'Somente raiz',
+        price: 180,
+        durationMinutes: 150,
+        durationFormatted: '2h30'
+      },
+      {
+        name: 'Cabelo curto',
+        price: 180,
+        durationMinutes: 150,
+        durationFormatted: '2h30'
+      },
+      {
+        name: 'Cabelo médio',
+        price: 230,
+        durationMinutes: 165,
+        durationFormatted: '2h45'
+      },
+      {
+        name: 'Cabelo longo',
+        price: 280,
+        durationMinutes: 180,
+        durationFormatted: '3h'
+      }
+    ],
+
     image: '',
     isActive: true,
     active: true,
     popular: true,
+
     highlights: [
-      'Raiz — R$ 180,00',
-      'Cabelo médio — R$ 280,00',
-      'Tempo de atendimento: 2h30 a 3h'
+      'Somente raiz — R$ 180,00',
+      'Cabelo curto — R$ 180,00',
+      'Cabelo médio — R$ 230,00',
+      'Cabelo longo — R$ 280,00',
+      'Tempo estimado: 2h30 a 3h'
     ]
   },
 
+  // ============================================================
+  // HIDRATAÇÃO
+  // ============================================================
   {
-    id: 'cronograma-capilar',
-    name: 'Cronograma capilar',
+    id: 'hidratacao',
+    name: 'Hidratação',
     category: 'tratamento',
+
     description:
-      'Tratamento de cuidados capilares personalizados.',
+      'Tratamento de hidratação para cuidar dos fios e melhorar sua aparência.',
+
     fullDescription:
-      'Cronograma capilar para cuidados e tratamento dos fios.',
+      'Hidratação capilar realizada de acordo com o comprimento dos cabelos, proporcionando cuidado e tratamento dos fios.',
+
     price: 60,
+
     durationMinutes: 90,
-    durationFormatted: '1h 30min',
+    durationFormatted: '1h30',
+
+    options: [
+      {
+        name: 'Cabelo curto',
+        price: 60,
+        durationMinutes: 90,
+        durationFormatted: '1h30'
+      },
+      {
+        name: 'Cabelo médio',
+        price: 80,
+        durationMinutes: 90,
+        durationFormatted: '1h30'
+      },
+      {
+        name: 'Cabelo longo',
+        price: 100,
+        durationMinutes: 90,
+        durationFormatted: '1h30'
+      }
+    ],
+
     image: '',
     isActive: true,
     active: true,
     popular: false,
+
     highlights: [
-      'R$ 60,00',
-      'Tempo estimado: 1h 30min'
+      'Cabelo curto — a partir de R$ 60,00',
+      'Cabelo médio — a partir de R$ 80,00',
+      'Cabelo longo — a partir de R$ 100,00',
+      'Tempo estimado: 1h30'
     ]
   },
 
+  // ============================================================
+  // CRONOGRAMA CAPILAR
+  // ============================================================
   {
-    id: 'producao-completa',
-    name: 'Produção completa',
-    category: 'maquiagem',
+    id: 'cronograma-capilar',
+    name: 'Cronograma Capilar',
+    category: 'tratamento',
+
     description:
-      'Cabelo e maquiagem.',
+      'Tratamento completo para cuidar dos cabelos em três sessões.',
+
     fullDescription:
-      'Produção completa com cabelo e maquiagem.',
-    price: 130,
-    durationMinutes: 60,
-    durationFormatted: '1h',
+      'Cronograma capilar com direito a três sessões de cuidados para tratar e manter os fios.',
+
+    price: 300,
+
+    durationMinutes: 90,
+    durationFormatted: '1h30 por sessão',
+
+    options: [
+      {
+        name: '3 sessões',
+        price: 300,
+        durationMinutes: 90,
+        durationFormatted: '1h30 por sessão'
+      }
+    ],
+
     image: '',
     isActive: true,
     active: true,
     popular: true,
+
     highlights: [
-      'Cabelo e maquiagem',
-      'R$ 130,00',
-      'Tempo estimado: 1 hora'
+      'R$ 300,00',
+      'Direito a 3 sessões',
+      'Tempo estimado: 1h30 por sessão'
     ]
   },
 
+  // ============================================================
+  // PRODUÇÃO COMPLETA
+  // ============================================================
+  {
+    id: 'producao-completa',
+    name: 'Produção Completa',
+    category: 'maquiagem',
+
+    description:
+      'Cabelo + maquiagem para uma produção completa.',
+
+    fullDescription:
+      'Produção completa reunindo cabelo e maquiagem em um único atendimento.',
+
+    price: 260,
+
+    durationMinutes: 120,
+    durationFormatted: '2h',
+
+    options: [
+      {
+        name: 'Cabelo + maquiagem',
+        price: 260,
+        durationMinutes: 120,
+        durationFormatted: '2h'
+      }
+    ],
+
+    image: '',
+    isActive: true,
+    active: true,
+    popular: true,
+
+    highlights: [
+      'Cabelo + maquiagem',
+      'R$ 260,00',
+      'Tempo estimado: 2h'
+    ]
+  },
+
+  // ============================================================
+  // MAQUIAGEM
+  // ============================================================
+  {
+    id: 'maquiagem',
+    name: 'Maquiagem',
+    category: 'maquiagem',
+
+    description:
+      'Maquiagem para diferentes ocasiões.',
+
+    fullDescription:
+      'Maquiagem personalizada para valorizar a beleza da cliente de acordo com a ocasião e preferência.',
+
+    price: 130,
+
+    durationMinutes: 60,
+    durationFormatted: '1h',
+
+    options: [
+      {
+        name: 'Maquiagem',
+        price: 130,
+        durationMinutes: 60,
+        durationFormatted: '1h'
+      }
+    ],
+
+    image: '',
+    isActive: true,
+    active: true,
+    popular: true,
+
+    highlights: [
+      'R$ 130,00',
+      'Tempo estimado: 1h'
+    ]
+  },
+
+  // ============================================================
+  // PENTEADO
+  // ============================================================
   {
     id: 'penteado',
     name: 'Penteado',
     category: 'cabelo',
+
     description:
-      'Penteado para diferentes ocasiões.',
+      'Penteado personalizado para diferentes ocasiões.',
+
     fullDescription:
-      'Penteado personalizado conforme o estilo e preferência da cliente.',
-    price: 40,
-    durationMinutes: 30,
-    durationFormatted: '30min',
+      'Penteado realizado de acordo com o estilo e preferência da cliente.',
+
+    price: 130,
+
+    durationMinutes: 60,
+    durationFormatted: '1h',
+
+    options: [
+      {
+        name: 'Penteado',
+        price: 130,
+        durationMinutes: 60,
+        durationFormatted: '1h'
+      }
+    ],
+
     image: '',
     isActive: true,
     active: true,
     popular: false,
+
+    highlights: [
+      'R$ 130,00',
+      'Tempo estimado: 1h'
+    ]
+  },
+
+  // ============================================================
+  // SOBRANCELHA
+  // ============================================================
+  {
+    id: 'sobrancelha',
+    name: 'Sobrancelha',
+    category: 'sobrancelha',
+
+    description:
+      'Design de sobrancelhas para valorizar o olhar.',
+
+    fullDescription:
+      'Design de sobrancelhas realizado de acordo com o formato do rosto e as características da cliente.',
+
+    price: 40,
+
+    durationMinutes: 30,
+    durationFormatted: '30min',
+
+    options: [
+      {
+        name: 'Sobrancelha',
+        price: 40,
+        durationMinutes: 30,
+        durationFormatted: '30min'
+      }
+    ],
+
+    image: '',
+    isActive: true,
+    active: true,
+    popular: false,
+
     highlights: [
       'R$ 40,00',
       'Tempo estimado: 30min'
     ]
   },
 
+  // ============================================================
+  // SOBRANCELHA COM HENNA
+  // ============================================================
   {
     id: 'sobrancelha-henna',
-    name: 'Sobrancelha com henna',
+    name: 'Sobrancelha com Henna',
     category: 'sobrancelha',
+
     description:
       'Design de sobrancelhas com aplicação de henna.',
+
     fullDescription:
-      'Design de sobrancelhas com henna para realçar e definir o olhar.',
+      'Design de sobrancelhas com aplicação de henna para realçar e definir o olhar.',
+
     price: 50,
+
     durationMinutes: 60,
     durationFormatted: '1h',
+
+    options: [
+      {
+        name: 'Sobrancelha com henna',
+        price: 50,
+        durationMinutes: 60,
+        durationFormatted: '1h'
+      }
+    ],
+
     image: '',
     isActive: true,
     active: true,
     popular: false,
+
     highlights: [
       'R$ 50,00',
-      'Tempo estimado: 1 hora'
+      'Tempo estimado: 1h'
     ]
   },
 
+  // ============================================================
+  // SOBRANCELHA + BUÇO
+  // ============================================================
+  {
+    id: 'sobrancelha-buco',
+    name: 'Sobrancelha + Buço',
+    category: 'sobrancelha',
+
+    description:
+      'Design de sobrancelhas combinado com buço.',
+
+    fullDescription:
+      'Serviço combinado de sobrancelhas e buço para um cuidado completo da região facial.',
+
+    price: 50,
+
+    durationMinutes: 40,
+    durationFormatted: '40min',
+
+    options: [
+      {
+        name: 'Sobrancelha + buço',
+        price: 50,
+        durationMinutes: 40,
+        durationFormatted: '40min'
+      }
+    ],
+
+    image: '',
+    isActive: true,
+    active: true,
+    popular: false,
+
+    highlights: [
+      'R$ 50,00',
+      'Tempo estimado: 40min'
+    ]
+  },
+
+  // ============================================================
+  // ESCOVA
+  // ============================================================
   {
     id: 'escova',
     name: 'Escova',
     category: 'cabelo',
+
     description:
       'Escova para diferentes comprimentos de cabelo.',
+
     fullDescription:
-      'Escova com valor conforme o comprimento do cabelo.',
-    price: 60,
+      'Escova realizada de acordo com o comprimento do cabelo.',
+
+    price: 50,
+
     durationMinutes: 60,
     durationFormatted: '1h',
+
+    options: [
+      {
+        name: 'Escova',
+        price: 50,
+        durationMinutes: 60,
+        durationFormatted: '1h'
+      },
+      {
+        name: 'Cabelo médio',
+        price: 80,
+        durationMinutes: 60,
+        durationFormatted: '1h'
+      },
+      {
+        name: 'Cabelo longo',
+        price: 100,
+        durationMinutes: 60,
+        durationFormatted: '1h'
+      }
+    ],
+
     image: '',
     isActive: true,
     active: true,
     popular: true,
+
     highlights: [
-      'Cabelo curto — a partir de R$ 60,00',
-      'Cabelo médio — a partir de R$ 100,00'
+      'A partir de R$ 50,00',
+      'Cabelo médio — a partir de R$ 80,00',
+      'Cabelo longo — a partir de R$ 100,00',
+      'Tempo estimado: 1h'
+    ]
+  },
+
+  // ============================================================
+  // COLORAÇÃO
+  // ============================================================
+  {
+    id: 'coloracao',
+    name: 'Coloração',
+    category: 'cabelo',
+
+    description:
+      'Coloração utilizando a tinta da cliente.',
+
+    fullDescription:
+      'Serviço de coloração realizado utilizando a tinta fornecida pela própria cliente.',
+
+    price: 60,
+
+    durationMinutes: 90,
+    durationFormatted: '1h30',
+
+    options: [
+      {
+        name: 'Com a tinta da cliente',
+        price: 60,
+        durationMinutes: 90,
+        durationFormatted: '1h30'
+      }
+    ],
+
+    image: '',
+    isActive: true,
+    active: true,
+    popular: false,
+
+    highlights: [
+      'Com a tinta da cliente',
+      'R$ 60,00',
+      'Tempo estimado: 1h30'
     ]
   }
 ];
 
+/**
+ * Horário padrão de atendimento
+ */
 export const DEFAULT_WEEKLY_SCHEDULE: WeeklySchedule = {
   segunda: {
     enabled: true,
@@ -155,6 +522,7 @@ export const DEFAULT_WEEKLY_SCHEDULE: WeeklySchedule = {
     breakStart: '12:00',
     breakEnd: '13:00'
   },
+
   terca: {
     enabled: true,
     startTime: '09:00',
@@ -162,6 +530,7 @@ export const DEFAULT_WEEKLY_SCHEDULE: WeeklySchedule = {
     breakStart: '12:00',
     breakEnd: '13:00'
   },
+
   quarta: {
     enabled: true,
     startTime: '09:00',
@@ -169,6 +538,7 @@ export const DEFAULT_WEEKLY_SCHEDULE: WeeklySchedule = {
     breakStart: '12:00',
     breakEnd: '13:00'
   },
+
   quinta: {
     enabled: true,
     startTime: '09:00',
@@ -176,6 +546,7 @@ export const DEFAULT_WEEKLY_SCHEDULE: WeeklySchedule = {
     breakStart: '12:00',
     breakEnd: '13:00'
   },
+
   sexta: {
     enabled: true,
     startTime: '09:00',
@@ -183,6 +554,7 @@ export const DEFAULT_WEEKLY_SCHEDULE: WeeklySchedule = {
     breakStart: '12:00',
     breakEnd: '13:00'
   },
+
   sabado: {
     enabled: true,
     startTime: '09:00',
@@ -190,6 +562,7 @@ export const DEFAULT_WEEKLY_SCHEDULE: WeeklySchedule = {
     breakStart: '12:00',
     breakEnd: '13:00'
   },
+
   domingo: {
     enabled: false,
     startTime: '09:00',
@@ -197,24 +570,41 @@ export const DEFAULT_WEEKLY_SCHEDULE: WeeklySchedule = {
   }
 };
 
+/**
+ * Única profissional do salão.
+ *
+ * O cliente não precisará escolher a profissional.
+ */
 export const PROFESSIONALS: Professional[] = [
   {
     id: 'laura-luiza',
+
     name: 'Laura Luíza',
+
     role: 'Profissional',
-    avatar:
-      'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?q=80&w=600&auto=format&fit=crop',
+
+    avatar: '',
+
     rating: 5.0,
+
     reviewsCount: 0,
+
     specialties: [
-      'Botox capilar',
-      'Cronograma capilar',
-      'Produção completa',
+      'Botox Capilar',
+      'Hidratação',
+      'Cronograma Capilar',
+      'Produção Completa',
+      'Maquiagem',
       'Penteado',
-      'Sobrancelha com henna',
-      'Escova'
+      'Sobrancelha',
+      'Sobrancelha com Henna',
+      'Sobrancelha + Buço',
+      'Escova',
+      'Coloração'
     ],
+
     active: true,
+
     isActive: true,
 
     weeklySchedule: {
@@ -225,6 +615,7 @@ export const PROFESSIONALS: Professional[] = [
         breakStart: '12:00',
         breakEnd: '13:00'
       },
+
       terca: {
         enabled: true,
         startTime: '09:00',
@@ -232,6 +623,7 @@ export const PROFESSIONALS: Professional[] = [
         breakStart: '12:00',
         breakEnd: '13:00'
       },
+
       quarta: {
         enabled: true,
         startTime: '09:00',
@@ -239,6 +631,7 @@ export const PROFESSIONALS: Professional[] = [
         breakStart: '12:00',
         breakEnd: '13:00'
       },
+
       quinta: {
         enabled: true,
         startTime: '09:00',
@@ -246,6 +639,7 @@ export const PROFESSIONALS: Professional[] = [
         breakStart: '12:00',
         breakEnd: '13:00'
       },
+
       sexta: {
         enabled: true,
         startTime: '09:00',
@@ -253,6 +647,7 @@ export const PROFESSIONALS: Professional[] = [
         breakStart: '12:00',
         breakEnd: '13:00'
       },
+
       sabado: {
         enabled: true,
         startTime: '09:00',
@@ -260,6 +655,7 @@ export const PROFESSIONALS: Professional[] = [
         breakStart: '12:00',
         breakEnd: '13:00'
       },
+
       domingo: {
         enabled: false,
         startTime: '09:00',
@@ -268,11 +664,16 @@ export const PROFESSIONALS: Professional[] = [
     },
 
     exceptions: [],
+
     createdAt: '2026-08-01T00:00:00Z',
+
     updatedAt: '2026-08-26T00:00:00Z'
   }
 ];
 
+/**
+ * Horários disponíveis em intervalos de 30 minutos.
+ */
 export const AVAILABLE_TIME_SLOTS = [
   '09:00',
   '09:30',
@@ -280,6 +681,7 @@ export const AVAILABLE_TIME_SLOTS = [
   '10:30',
   '11:00',
   '11:30',
+
   '13:00',
   '13:30',
   '14:00',
@@ -300,32 +702,48 @@ export const AVAILABLE_TIME_SLOTS = [
 
 /**
  * Get DayOfWeekKey from standard Javascript Date day
- * (0 = Domingo, 1 = Segunda, ...)
+ * 0 = Domingo
+ * 1 = Segunda
+ * ...
+ * 6 = Sábado
  */
-export function getDayOfWeekKey(dayIndex: number): DayOfWeekKey {
+export function getDayOfWeekKey(
+  dayIndex: number
+): DayOfWeekKey {
   switch (dayIndex) {
     case 0:
       return 'domingo';
+
     case 1:
       return 'segunda';
+
     case 2:
       return 'terca';
+
     case 3:
       return 'quarta';
+
     case 4:
       return 'quinta';
+
     case 5:
       return 'sexta';
+
     case 6:
       return 'sabado';
+
     default:
       return 'segunda';
   }
 }
 
 /**
- * Generate available time slots for a professional on a given date
- * considering weekly schedule, breaks, and specific day/hour exceptions.
+ * Gera os horários disponíveis da profissional
+ * considerando:
+ * - horário de funcionamento
+ * - intervalo
+ * - folgas
+ * - bloqueios parciais
  */
 export function getProfessionalAvailabilityForDate(
   professional: Professional,
@@ -336,85 +754,136 @@ export function getProfessionalAvailabilityForDate(
   reason?: string;
   workingHoursText?: string;
 } {
-  if (!professional.isActive && professional.active === false) {
+  if (
+    !professional.isActive &&
+    professional.active === false
+  ) {
     return {
       isAvailable: false,
       slots: [],
-      reason: 'Profissional temporariamente inativa no sistema.'
+      reason:
+        'Profissional temporariamente inativa no sistema.'
     };
   }
 
   const targetDate =
-    typeof date === 'string' ? new Date(date + 'T00:00:00') : date;
+    typeof date === 'string'
+      ? new Date(date + 'T00:00:00')
+      : date;
 
   const year = targetDate.getFullYear();
-  const month = String(targetDate.getMonth() + 1).padStart(2, '0');
-  const day = String(targetDate.getDate()).padStart(2, '0');
-  const dateISO = `${year}-${month}-${day}`;
 
-  const dayOfWeek = targetDate.getDay();
-  const dayKey = getDayOfWeekKey(dayOfWeek);
+  const month = String(
+    targetDate.getMonth() + 1
+  ).padStart(2, '0');
 
-  const schedule = professional.weeklySchedule
-    ? professional.weeklySchedule[dayKey]
-    : DEFAULT_WEEKLY_SCHEDULE[dayKey];
+  const day = String(
+    targetDate.getDate()
+  ).padStart(2, '0');
 
-  if (!schedule || !schedule.enabled) {
+  const dateISO =
+    `${year}-${month}-${day}`;
+
+  const dayOfWeek =
+    targetDate.getDay();
+
+  const dayKey =
+    getDayOfWeekKey(dayOfWeek);
+
+  const schedule =
+    professional.weeklySchedule
+      ? professional.weeklySchedule[dayKey]
+      : DEFAULT_WEEKLY_SCHEDULE[dayKey];
+
+  if (
+    !schedule ||
+    !schedule.enabled
+  ) {
     return {
       isAvailable: false,
       slots: [],
-      reason: `Não há atendimento programado para ${dayKey}.`,
+      reason:
+        `Não há atendimento programado para ${dayKey}.`,
       workingHoursText: 'Fechado'
     };
   }
 
-  if (professional.exceptions && professional.exceptions.length > 0) {
-    const fullDayOff = professional.exceptions.find(
-      (ex) => ex.date === dateISO && ex.type === 'day_off'
-    );
+  if (
+    professional.exceptions &&
+    professional.exceptions.length > 0
+  ) {
+    const fullDayOff =
+      professional.exceptions.find(
+        (ex) =>
+          ex.date === dateISO &&
+          ex.type === 'day_off'
+      );
 
     if (fullDayOff) {
       return {
         isAvailable: false,
         slots: [],
         reason:
-          fullDayOff.reason || 'Folga / indisponibilidade programada.',
-        workingHoursText: 'Folga excepcional'
+          fullDayOff.reason ||
+          'Folga / indisponibilidade programada.',
+        workingHoursText:
+          'Folga excepcional'
       };
     }
   }
 
-  const [startHour, startMin] = (schedule.startTime || '09:00')
-    .split(':')
-    .map(Number);
+  const [startHour, startMin] =
+    (schedule.startTime || '09:00')
+      .split(':')
+      .map(Number);
 
-  const [endHour, endMin] = (schedule.endTime || '21:00')
-    .split(':')
-    .map(Number);
+  const [endHour, endMin] =
+    (schedule.endTime || '21:00')
+      .split(':')
+      .map(Number);
 
-  const startTotalMinutes = startHour * 60 + startMin;
-  const endTotalMinutes = endHour * 60 + endMin;
+  const startTotalMinutes =
+    startHour * 60 + startMin;
+
+  const endTotalMinutes =
+    endHour * 60 + endMin;
 
   let breakStartMinutes = -1;
   let breakEndMinutes = -1;
 
-  if (schedule.breakStart && schedule.breakEnd) {
-    const [bsh, bsm] = schedule.breakStart.split(':').map(Number);
-    const [beh, bem] = schedule.breakEnd.split(':').map(Number);
+  if (
+    schedule.breakStart &&
+    schedule.breakEnd
+  ) {
+    const [bsh, bsm] =
+      schedule.breakStart
+        .split(':')
+        .map(Number);
 
-    breakStartMinutes = bsh * 60 + bsm;
-    breakEndMinutes = beh * 60 + bem;
+    const [beh, bem] =
+      schedule.breakEnd
+        .split(':')
+        .map(Number);
+
+    breakStartMinutes =
+      bsh * 60 + bsm;
+
+    breakEndMinutes =
+      beh * 60 + bem;
   }
 
-  const partialBlocks = (professional.exceptions || []).filter(
-    (ex) =>
-      ex.date === dateISO &&
-      ex.type === 'partial_block' &&
-      ex.startTime &&
-      ex.endTime
-  );
+  const partialBlocks =
+    (professional.exceptions || [])
+      .filter(
+        (ex) =>
+          ex.date === dateISO &&
+          ex.type === 'partial_block' &&
+          ex.startTime &&
+          ex.endTime
+      );
 
   const slots: string[] = [];
+
   const intervalMinutes = 30;
 
   for (
@@ -431,19 +900,48 @@ export function getProfessionalAvailabilityForDate(
       continue;
     }
 
-    const hStr = String(Math.floor(m / 60)).padStart(2, '0');
-    const mStr = String(m % 60).padStart(2, '0');
-    const slotTimeStr = `${hStr}:${mStr}`;
+    const hStr =
+      String(
+        Math.floor(m / 60)
+      ).padStart(2, '0');
 
-    const isBlocked = partialBlocks.some((pb) => {
-      const [pbsh, pbsm] = (pb.startTime || '').split(':').map(Number);
-      const [pbeh, pbem] = (pb.endTime || '').split(':').map(Number);
+    const mStr =
+      String(
+        m % 60
+      ).padStart(2, '0');
 
-      const pbStart = pbsh * 60 + pbsm;
-      const pbEnd = pbeh * 60 + pbem;
+    const slotTimeStr =
+      `${hStr}:${mStr}`;
 
-      return m >= pbStart && m < pbEnd;
-    });
+    const isBlocked =
+      partialBlocks.some((pb) => {
+        const [
+          pbsh,
+          pbsm
+        ] =
+          (pb.startTime || '')
+            .split(':')
+            .map(Number);
+
+        const [
+          pbeh,
+          pbem
+        ] =
+          (pb.endTime || '')
+            .split(':')
+            .map(Number);
+
+        const pbStart =
+          pbsh * 60 + pbsm;
+
+        const pbEnd =
+          pbeh * 60 + pbem;
+
+        return (
+          m >= pbStart &&
+          m < pbEnd
+        );
+      });
 
     if (!isBlocked) {
       slots.push(slotTimeStr);
@@ -451,9 +949,13 @@ export function getProfessionalAvailabilityForDate(
   }
 
   return {
-    isAvailable: slots.length > 0,
+    isAvailable:
+      slots.length > 0,
+
     slots,
-    workingHoursText: `${schedule.startTime} às ${schedule.endTime}`
+
+    workingHoursText:
+      `${schedule.startTime} às ${schedule.endTime}`
   };
 }
 
