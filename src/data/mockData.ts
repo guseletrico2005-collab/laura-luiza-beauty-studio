@@ -1,3 +1,4 @@
+```ts
 import {
   Service,
   Appointment,
@@ -21,9 +22,14 @@ export const SALON_INFO: SalonInfo = {
 /**
  * Catálogo inicial de serviços.
  *
- * Os serviços não utilizam imagens na nova apresentação.
- * O campo image permanece vazio para manter compatibilidade
- * com o restante do sistema.
+ * Os serviços são usados como catálogo inicial
+ * caso o Firestore ainda não possua os documentos.
+ *
+ * IMPORTANTE:
+ * - Não são utilizadas imagens.
+ * - Hidratação possui opções por comprimento.
+ * - Botox possui opções por comprimento.
+ * - Escova possui apenas o preço inicial.
  */
 export const INITIAL_SERVICES: Service[] = [
 
@@ -56,8 +62,10 @@ export const INITIAL_SERVICES: Service[] = [
     ],
 
     image: '',
+
     isActive: true,
     active: true,
+
     popular: true,
 
     highlights: [
@@ -76,7 +84,7 @@ export const INITIAL_SERVICES: Service[] = [
     category: 'maquiagem',
 
     description:
-      'Maquiagem personalizada para diferentes ocasiões.',
+      'Maquiagem para diferentes ocasiões.',
 
     fullDescription:
       'Maquiagem personalizada para valorizar a beleza da cliente de acordo com a ocasião e preferência.',
@@ -96,8 +104,10 @@ export const INITIAL_SERVICES: Service[] = [
     ],
 
     image: '',
+
     isActive: true,
     active: true,
+
     popular: true,
 
     highlights: [
@@ -135,8 +145,10 @@ export const INITIAL_SERVICES: Service[] = [
     ],
 
     image: '',
+
     isActive: true,
     active: true,
+
     popular: false,
 
     highlights: [
@@ -174,8 +186,10 @@ export const INITIAL_SERVICES: Service[] = [
     ],
 
     image: '',
+
     isActive: true,
     active: true,
+
     popular: false,
 
     highlights: [
@@ -205,7 +219,7 @@ export const INITIAL_SERVICES: Service[] = [
 
     options: [
       {
-        name: 'Sobrancelha com henna',
+        name: 'Sobrancelha com Henna',
         price: 50,
         durationMinutes: 60,
         durationFormatted: '1h'
@@ -213,8 +227,10 @@ export const INITIAL_SERVICES: Service[] = [
     ],
 
     image: '',
+
     isActive: true,
     active: true,
+
     popular: false,
 
     highlights: [
@@ -244,7 +260,7 @@ export const INITIAL_SERVICES: Service[] = [
 
     options: [
       {
-        name: 'Sobrancelha + buço',
+        name: 'Sobrancelha + Buço',
         price: 50,
         durationMinutes: 40,
         durationFormatted: '40min'
@@ -252,8 +268,10 @@ export const INITIAL_SERVICES: Service[] = [
     ],
 
     image: '',
+
     isActive: true,
     active: true,
+
     popular: false,
 
     highlights: [
@@ -271,10 +289,10 @@ export const INITIAL_SERVICES: Service[] = [
     category: 'cabelo',
 
     description:
-      'Escova para diferentes tipos e comprimentos de cabelo.',
+      'Escova para diferentes estilos e tipos de cabelo.',
 
     fullDescription:
-      'Escova realizada de acordo com o cabelo da cliente.',
+      'Escova realizada de acordo com o tipo e necessidade do cabelo.',
 
     price: 50,
 
@@ -291,8 +309,10 @@ export const INITIAL_SERVICES: Service[] = [
     ],
 
     image: '',
+
     isActive: true,
     active: true,
+
     popular: true,
 
     highlights: [
@@ -313,7 +333,7 @@ export const INITIAL_SERVICES: Service[] = [
       'Tratamento de hidratação para cuidar dos fios.',
 
     fullDescription:
-      'Hidratação capilar realizada de acordo com o comprimento dos cabelos, proporcionando cuidado e tratamento dos fios.',
+      'Hidratação capilar com valor definido de acordo com o comprimento do cabelo.',
 
     price: 60,
 
@@ -342,14 +362,16 @@ export const INITIAL_SERVICES: Service[] = [
     ],
 
     image: '',
+
     isActive: true,
     active: true,
+
     popular: false,
 
     highlights: [
-      'Cabelo curto — a partir de R$ 60,00',
-      'Cabelo médio — a partir de R$ 80,00',
-      'Cabelo longo — a partir de R$ 100,00',
+      'Cabelo curto — R$ 60,00',
+      'Cabelo médio — R$ 80,00',
+      'Cabelo longo — R$ 100,00',
       'Tempo estimado: 1h30'
     ]
   },
@@ -363,7 +385,7 @@ export const INITIAL_SERVICES: Service[] = [
     category: 'tratamento',
 
     description:
-      'Tratamento capilar com opções de acordo com o comprimento e a necessidade dos fios.',
+      'Tratamento capilar com valor definido de acordo com o comprimento dos fios.',
 
     fullDescription:
       'Botox capilar realizado de acordo com o comprimento do cabelo, proporcionando cuidado, alinhamento e melhora da aparência dos fios.',
@@ -401,8 +423,10 @@ export const INITIAL_SERVICES: Service[] = [
     ],
 
     image: '',
+
     isActive: true,
     active: true,
+
     popular: true,
 
     highlights: [
@@ -423,7 +447,7 @@ export const INITIAL_SERVICES: Service[] = [
     category: 'tratamento',
 
     description:
-      'Tratamento completo para cuidar dos cabelos em três sessões.',
+      'Tratamento completo dividido em três sessões.',
 
     fullDescription:
       'Cronograma capilar com três sessões de cuidados para tratar e manter os fios.',
@@ -443,8 +467,10 @@ export const INITIAL_SERVICES: Service[] = [
     ],
 
     image: '',
+
     isActive: true,
     active: true,
+
     popular: true,
 
     highlights: [
@@ -483,8 +509,10 @@ export const INITIAL_SERVICES: Service[] = [
     ],
 
     image: '',
+
     isActive: true,
     active: true,
+
     popular: false,
 
     highlights: [
@@ -496,7 +524,7 @@ export const INITIAL_SERVICES: Service[] = [
 ];
 
 /**
- * Horário padrão de atendimento
+ * Horário padrão de atendimento.
  */
 export const DEFAULT_WEEKLY_SCHEDULE: WeeklySchedule = {
   segunda: {
@@ -557,7 +585,7 @@ export const DEFAULT_WEEKLY_SCHEDULE: WeeklySchedule = {
 /**
  * Única profissional do salão.
  *
- * O cliente não precisará escolher a profissional.
+ * O cliente não precisa escolher a profissional.
  */
 export const PROFESSIONALS: Professional[] = [
   {
@@ -685,7 +713,7 @@ export const AVAILABLE_TIME_SLOTS = [
 ];
 
 /**
- * Get DayOfWeekKey from standard Javascript Date day
+ * Retorna a chave do dia da semana.
  *
  * 0 = Domingo
  * 1 = Segunda
@@ -759,15 +787,18 @@ export function getProfessionalAvailabilityForDate(
       ? new Date(date + 'T00:00:00')
       : date;
 
-  const year = targetDate.getFullYear();
+  const year =
+    targetDate.getFullYear();
 
-  const month = String(
-    targetDate.getMonth() + 1
-  ).padStart(2, '0');
+  const month =
+    String(
+      targetDate.getMonth() + 1
+    ).padStart(2, '0');
 
-  const day = String(
-    targetDate.getDate()
-  ).padStart(2, '0');
+  const day =
+    String(
+      targetDate.getDate()
+    ).padStart(2, '0');
 
   const dateISO =
     `${year}-${month}-${day}`;
@@ -831,10 +862,12 @@ export function getProfessionalAvailabilityForDate(
       .map(Number);
 
   const startTotalMinutes =
-    startHour * 60 + startMin;
+    startHour * 60 +
+    startMin;
 
   const endTotalMinutes =
-    endHour * 60 + endMin;
+    endHour * 60 +
+    endMin;
 
   let breakStartMinutes = -1;
   let breakEndMinutes = -1;
@@ -854,10 +887,12 @@ export function getProfessionalAvailabilityForDate(
         .map(Number);
 
     breakStartMinutes =
-      bsh * 60 + bsm;
+      bsh * 60 +
+      bsm;
 
     breakEndMinutes =
-      beh * 60 + bem;
+      beh * 60 +
+      bem;
   }
 
   const partialBlocks =
@@ -920,10 +955,12 @@ export function getProfessionalAvailabilityForDate(
             .map(Number);
 
         const pbStart =
-          pbsh * 60 + pbsm;
+          pbsh * 60 +
+          pbsm;
 
         const pbEnd =
-          pbeh * 60 + pbem;
+          pbeh * 60 +
+          pbem;
 
         return (
           m >= pbStart &&
@@ -958,3 +995,4 @@ export const ADMIN_STATS = {
 };
 
 export const TESTIMONIALS = [];
+```
