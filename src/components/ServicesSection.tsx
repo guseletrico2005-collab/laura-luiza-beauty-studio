@@ -18,15 +18,12 @@ export const ServicesSection: React.FC<ServicesSectionProps> = ({
   const [searchQuery, setSearchQuery] = useState<string>('');
 
   const categories = [
-    { id: 'todos', label: 'Todos os Serviços' },
-    { id: 'noiva', label: '👑 Dia da Noiva' },
-    { id: 'pacotes', label: '✨ Pacotes & Combos' },
-    { id: 'maquiagem', label: '💄 Maquiagem' },
-    { id: 'cabelo', label: '💇‍♀️ Cabelos & Escovas' },
-    { id: 'sobrancelha', label: '👁️ Sobrancelhas' },
-    { id: 'pes', label: '🦶 Spa dos Pés' },
-    { id: 'tratamento', label: '🧴 Tratamentos' },
-  ];
+  { id: 'todos', label: 'Todos os Serviços' },
+  { id: 'maquiagem', label: 'Maquiagem' },
+  { id: 'cabelo', label: 'Cabelos & Escovas' },
+  { id: 'sobrancelha', label: 'Sobrancelhas' },
+  { id: 'tratamento', label: 'Tratamentos' },
+];
 
   const filteredServices = useMemo(() => {
     return services.filter((service) => {
