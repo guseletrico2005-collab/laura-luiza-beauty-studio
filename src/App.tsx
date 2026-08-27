@@ -5,28 +5,26 @@
 
 import React, { useState, useEffect } from 'react';
 import { AppView, Service, Appointment, Professional, CurrentUser } from './types';
-import { 
-  INITIAL_SERVICES, 
-  PROFESSIONALS, 
-  SALON_INFO 
+import {
+  INITIAL_SERVICES,
+  PROFESSIONALS,
+  SALON_INFO
 } from './data/mockData';
 
 import { Navbar } from './components/Navbar';
 import { MobileNav } from './components/MobileNav';
-import { Hero } from './components/Hero';
 import { ServicesSection } from './components/ServicesSection';
 import { ServiceDetailModal } from './components/ServiceDetailModal';
 import { BookingSection } from './components/BookingSection';
 import { AppointmentsView } from './components/AppointmentsView';
 import { AuthView } from './components/AuthView';
 import { AdminView } from './components/AdminView';
-import { TestimonialsSection } from './components/TestimonialsSection';
 import { Footer } from './components/Footer';
 import { ClientAuthGate } from './components/ClientAuthGate';
 
-import { auth, db } from './firebase';
+import { auth } from './firebase';
 import { onAuthStateChanged } from 'firebase/auth';
-import { doc, getDoc } from 'firebase/firestore';
+
 import {
   subscribeToServices,
   subscribeToAppointments,
@@ -43,23 +41,35 @@ import {
   getUserProfileFromFirestore,
   checkIsAdmin
 } from './services/firestoreService';
+
 import { Sparkles, RefreshCw } from 'lucide-react';
 
 export default function App() {
   const [currentView, setCurrentView] = useState<AppView>('home');
+
   const [services, setServices] = useState<Service[]>(INITIAL_SERVICES);
-  const [professionals, setProfessionals] = useState<Professional[]>(PROFESSIONALS);
+
+  const [professionals, setProfessionals] = useState<Professional[]>(
+    PROFESSIONALS
+  );
+
   const [appointments, setAppointments] = useState<Appointment[]>([]);
+
   const [bookedSlots, setBookedSlots] = useState<Set<string>>(new Set());
-  const [selectedServiceForModal, setSelectedServiceForModal] = useState<Service | null>(null);
-  const [selectedServiceForBooking, setSelectedServiceForBooking] = useState<Service | null>(INITIAL_SERVICES[0]);
+
+  const [selectedServiceForModal, setSelectedServiceForModal] =
+    useState<Service | null>(null);
+
+  const [selectedServiceForBooking, setSelectedServiceForBooking] =
+    useState<Service | null>(INITIAL_SERVICES[0]);
+
   const [isDetailModalOpen, setIsDetailModalOpen] = useState(false);
-  
+
   // Auth state
   const [isAuthLoading, setIsAuthLoading] = useState(true);
   const [currentUser, setCurrentUser] = useState<CurrentUser | null>(null);
 
-  // Subscribe to Firebase Auth State with Firestore User Profile synchronization
+  // Firebase Auth + Firestore profile synchronization
   useEffect(() => {
     const unsubscribeAuth = onAuthStateChanged(auth, async (user) => {
       if (user) {
@@ -68,18 +78,30 @@ export default function App() {
         let profilePhone = user.phoneNumber || '';
 
         try {
-          // 1. Check admin privileges
+          // Check admin privileges
           isAdmin = await checkIsAdmin();
 
-          // 2. Fetch user profile from Firestore users/{uid}
+          // Load Firestore user profile
           const userDoc = await getUserProfileFromFirestore(user.uid);
+
           if (userDoc) {
-            if (userDoc.name) profileName = userDoc.name;
-            if (userDoc.phone) profilePhone = userDoc.phone;
-            if (userDoc.role === 'admin') isAdmin = true;
+            if (userDoc.name) {
+              profileName = userDoc.name;
+            }
+
+            if (userDoc.phone) {
+              profilePhone = userDoc.phone;
+            }
+
+            if (userDoc.role === 'admin') {
+              isAdmin = true;
+            }
           }
         } catch (e) {
-          console.warn('Error fetching user profile details:', e);
+          console.warn(
+            'Error fetching user profile details:',
+            e
+          );
         }
 
         setCurrentUser({
@@ -90,22 +112,27 @@ export default function App() {
           photoURL: user.photoURL || undefined,
           role: isAdmin ? 'admin' : 'client'
         });
+
+        // Depois do login, iniciar na tela de serviços
+        setCurrentView('home');
       } else {
         setCurrentUser(null);
       }
+
       setIsAuthLoading(false);
     });
 
     return () => unsubscribeAuth();
   }, []);
 
-  // Real-time listener for Services Catalog & Booked Slots (Real-Time Availability)
+  // Real-time listener for Services, Booked Slots and Professionals
   useEffect(() => {
     if (!currentUser) return;
 
     const unsubServices = subscribeToServices((firestoreServices) => {
       if (firestoreServices && firestoreServices.length > 0) {
         setServices(firestoreServices);
+
         if (!selectedServiceForBooking) {
           setSelectedServiceForBooking(firestoreServices[0]);
         }
@@ -116,11 +143,13 @@ export default function App() {
       setBookedSlots(slots);
     });
 
-    const unsubProfessionals = subscribeToProfessionals((firestoreProfs) => {
-      if (firestoreProfs && firestoreProfs.length > 0) {
-        setProfessionals(firestoreProfs);
+    const unsubProfessionals = subscribeToProfessionals(
+      (firestoreProfs) => {
+        if (firestoreProfs && firestoreProfs.length > 0) {
+          setProfessionals(firestoreProfs);
+        }
       }
-    });
+    );
 
     return () => {
       unsubServices();
@@ -129,7 +158,7 @@ export default function App() {
     };
   }, [currentUser]);
 
-  // Real-time listener for Appointments (Client Data Isolation & Admin Full View)
+  // Real-time listener for appointments
   useEffect(() => {
     if (!currentUser) {
       setAppointments([]);
@@ -137,6 +166,7 @@ export default function App() {
     }
 
     const isAdmin = currentUser.role === 'admin';
+
     const unsubAppointments = subscribeToAppointments(
       (firestoreAppointments) => {
         if (firestoreAppointments) {
@@ -149,52 +179,100 @@ export default function App() {
     );
 
     return () => {
-      if (unsubAppointments) unsubAppointments();
+      if (unsubAppointments) {
+        unsubAppointments();
+      }
     };
   }, [currentUser]);
 
-  // Scroll to top on view change
+  // Scroll to top whenever the view changes
   useEffect(() => {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth'
+    });
   }, [currentView]);
 
-  // Handlers
+  // Open service details
   const handleViewDetails = (service: Service) => {
     setSelectedServiceForModal(service);
     setIsDetailModalOpen(true);
   };
 
+  // Select service and go to booking
   const handleBookService = (service: Service) => {
     setSelectedServiceForBooking(service);
     setCurrentView('booking');
   };
 
-  const handleBookingConfirmed = async (newAppointment: Appointment) => {
+  // Confirm booking
+  const handleBookingConfirmed = async (
+    newAppointment: Appointment
+  ) => {
     await createAppointmentInFirestore(newAppointment);
-    setAppointments((prev) => [newAppointment, ...prev.filter(a => a.id !== newAppointment.id)]);
+
+    setAppointments((prev) => [
+      newAppointment,
+      ...prev.filter(
+        (appointment) => appointment.id !== newAppointment.id
+      )
+    ]);
   };
 
-  const handleCancelAppointment = async (appointment: Appointment) => {
+  // Cancel appointment
+  const handleCancelAppointment = async (
+    appointment: Appointment
+  ) => {
     try {
-      await updateAppointmentStatusInFirestore(appointment, 'Cancelado');
+      await updateAppointmentStatusInFirestore(
+        appointment,
+        'Cancelado'
+      );
     } catch (err) {
-      console.error('Error updating status in Firestore:', err);
+      console.error(
+        'Error updating status in Firestore:',
+        err
+      );
     }
+
     setAppointments((prev) =>
-      prev.map((apt) => (apt.id === appointment.id ? { ...apt, status: 'Cancelado' } : apt))
+      prev.map((apt) =>
+        apt.id === appointment.id
+          ? {
+              ...apt,
+              status: 'Cancelado'
+            }
+          : apt
+      )
     );
   };
 
+  // Update appointment status
   const handleUpdateAppointmentStatus = async (
     appointment: Appointment,
-    newStatus: 'Confirmado' | 'Concluído' | 'Cancelado'
+    newStatus:
+      | 'Confirmado'
+      | 'Concluído'
+      | 'Cancelado'
   ) => {
-    await updateAppointmentStatusInFirestore(appointment, newStatus);
+    await updateAppointmentStatusInFirestore(
+      appointment,
+      newStatus
+    );
+
     setAppointments((prev) =>
-      prev.map((apt) => (apt.id === appointment.id ? { ...apt, status: newStatus } : apt))
+      prev.map((apt) =>
+        apt.id === appointment.id
+          ? {
+              ...apt,
+              status: newStatus
+            }
+          : apt
+      )
     );
   };
 
+  // Reschedule appointment
   const handleRescheduleAppointment = async (
     appointment: Appointment,
     newDate: string,
@@ -209,6 +287,7 @@ export default function App() {
       newTime,
       newProfessional
     );
+
     setAppointments((prev) =>
       prev.map((apt) =>
         apt.id === appointment.id
@@ -225,51 +304,84 @@ export default function App() {
     );
   };
 
-  const handleCreateManualAppointment = async (newAppointment: Appointment) => {
+  // Create manual appointment
+  const handleCreateManualAppointment = async (
+    newAppointment: Appointment
+  ) => {
     await createAppointmentInFirestore(newAppointment);
-    setAppointments((prev) => [newAppointment, ...prev.filter((a) => a.id !== newAppointment.id)]);
+
+    setAppointments((prev) => [
+      newAppointment,
+      ...prev.filter(
+        (appointment) => appointment.id !== newAppointment.id
+      )
+    ]);
   };
 
+  // Save service
   const handleSaveService = async (service: Service) => {
     await saveServiceToFirestore(service);
   };
 
+  // Delete service
   const handleDeleteService = async (id: string) => {
     await deleteServiceFromFirestore(id);
   };
 
-  const handleSaveProfessional = async (prof: Professional) => {
-    await saveProfessionalToFirestore(prof);
+  // Save professional
+  const handleSaveProfessional = async (
+    professional: Professional
+  ) => {
+    await saveProfessionalToFirestore(professional);
   };
 
-  const handleDeleteProfessional = async (id: string, name?: string) => {
+  // Delete professional
+  const handleDeleteProfessional = async (
+    id: string,
+    name?: string
+  ) => {
     await deleteProfessionalFromFirestore(id, name);
   };
 
+  // Seed professionals
   const handleSeedProfessionals = async () => {
     return await seedDefaultProfessionalsIfAdmin();
   };
 
-  const handleLoginSuccess = (name: string, email: string) => {
+  // Login success
+  const handleLoginSuccess = (
+    name: string,
+    email: string
+  ) => {
     if (!name && !email) {
       setCurrentUser(null);
       setCurrentView('home');
     }
   };
 
-  // 1. Loading Splash Screen
+  // ============================================================
+  // 1. LOADING SCREEN
+  // ============================================================
+
   if (isAuthLoading) {
     return (
       <div className="min-h-screen w-full bg-[#FAF3F5] flex flex-col items-center justify-center space-y-4 font-sans">
         <div className="w-16 h-16 rounded-full bg-gradient-to-tr from-[#9E4760] to-[#E8A7B8] p-1 shadow-lg shadow-[#9E4760]/20 flex items-center justify-center animate-pulse">
           <div className="w-full h-full bg-[#FCF9F7] rounded-full flex items-center justify-center text-[#9E4760]">
-            <Sparkles className="w-8 h-8 animate-spin" style={{ animationDuration: '3s' }} />
+            <Sparkles
+              className="w-8 h-8 animate-spin"
+              style={{
+                animationDuration: '3s'
+              }}
+            />
           </div>
         </div>
+
         <div className="text-center">
           <h2 className="font-serif text-xl font-bold text-[#3D1E28]">
             Laura Luíza Beauty
           </h2>
+
           <p className="text-xs text-[#8E6A77] mt-1 flex items-center justify-center gap-1.5">
             <RefreshCw className="w-3 h-3 animate-spin text-[#9E4760]" />
             <span>Iniciando ambiente seguro...</span>
@@ -279,8 +391,10 @@ export default function App() {
     );
   }
 
-  // 2. Mandatory Client Authentication Gate
-  // If not authenticated, the visitor CANNOT access any section of the app.
+  // ============================================================
+  // 2. MANDATORY CLIENT AUTHENTICATION
+  // ============================================================
+
   if (!currentUser) {
     return (
       <ClientAuthGate
@@ -291,14 +405,28 @@ export default function App() {
 
           try {
             isAdmin = await checkIsAdmin();
-            const userDoc = await getUserProfileFromFirestore(user.uid);
+
+            const userDoc =
+              await getUserProfileFromFirestore(user.uid);
+
             if (userDoc) {
-              if (userDoc.name) profileName = userDoc.name;
-              if (userDoc.phone) profilePhone = userDoc.phone;
-              if (userDoc.role === 'admin') isAdmin = true;
+              if (userDoc.name) {
+                profileName = userDoc.name;
+              }
+
+              if (userDoc.phone) {
+                profilePhone = userDoc.phone;
+              }
+
+              if (userDoc.role === 'admin') {
+                isAdmin = true;
+              }
             }
           } catch (e) {
-            console.warn('Error loading profile after auth:', e);
+            console.warn(
+              'Error loading profile after auth:',
+              e
+            );
           }
 
           setCurrentUser({
@@ -309,55 +437,52 @@ export default function App() {
             photoURL: user.photoURL || undefined,
             role: isAdmin ? 'admin' : 'client'
           });
+
+          // IMPORTANTE:
+          // Depois do login o cliente vai para a tela de serviços.
           setCurrentView('home');
         }}
       />
     );
   }
 
-  // 3. Authenticated Application
+  // ============================================================
+  // 3. AUTHENTICATED APPLICATION
+  // ============================================================
+
   return (
     <div className="min-h-screen flex flex-col bg-[#FCF9F7] text-[#3D2C33] antialiased pb-16 lg:pb-0 font-sans">
-      
+
       {/* Main Top Navigation */}
       <Navbar
         currentView={currentView}
         onNavigate={setCurrentView}
         salonInfo={SALON_INFO}
-        appointmentsCount={appointments.filter((a) => a.status === 'Confirmado').length}
+        appointmentsCount={
+          appointments.filter(
+            (appointment) =>
+              appointment.status === 'Confirmado'
+          ).length
+        }
         userRole={currentUser.role}
       />
 
-      {/* Main Content Area based on active view */}
+      {/* Main Content */}
       <main className="flex-1">
-        
-        {/* HOME VIEW */}
+
+        {/* ======================================================
+            HOME VIEW
+
+            Depois do login:
+            LOGIN → SERVIÇOS
+            ====================================================== */}
+
         {currentView === 'home' && (
-          <>
-            <Hero
-              salonInfo={SALON_INFO}
-              onBookClick={() => {
-                setSelectedServiceForBooking(services[0]);
-                setCurrentView('booking');
-              }}
-              onServicesClick={() => {
-                const el = document.getElementById('services-section');
-                if (el) {
-                  el.scrollIntoView({ behavior: 'smooth' });
-                } else {
-                  setCurrentView('services');
-                }
-              }}
-            />
-
-            <ServicesSection
-              services={services}
-              onViewDetails={handleViewDetails}
-              onBookService={handleBookService}
-            />
-
-            <TestimonialsSection />
-          </>
+          <ServicesSection
+            services={services}
+            onViewDetails={handleViewDetails}
+            onBookService={handleBookService}
+          />
         )}
 
         {/* SERVICES VIEW */}
@@ -381,7 +506,9 @@ export default function App() {
             currentUser={currentUser}
             onServiceChange={setSelectedServiceForBooking}
             onBookingConfirmed={handleBookingConfirmed}
-            onViewAppointments={() => setCurrentView('appointments')}
+            onViewAppointments={() =>
+              setCurrentView('appointments')
+            }
           />
         )}
 
@@ -395,7 +522,9 @@ export default function App() {
               setSelectedServiceForBooking(services[0]);
               setCurrentView('booking');
             }}
-            onOpenAuthModal={() => setCurrentView('auth')}
+            onOpenAuthModal={() =>
+              setCurrentView('auth')
+            }
           />
         )}
 
@@ -404,7 +533,9 @@ export default function App() {
           <AuthView
             currentUser={currentUser}
             onLoginSuccess={handleLoginSuccess}
-            onNavigateHome={() => setCurrentView('home')}
+            onNavigateHome={() =>
+              setCurrentView('home')
+            }
           />
         )}
 
@@ -421,36 +552,57 @@ export default function App() {
             onSaveProfessional={handleSaveProfessional}
             onDeleteProfessional={handleDeleteProfessional}
             onSeedProfessionals={handleSeedProfessionals}
-            onUpdateAppointmentStatus={handleUpdateAppointmentStatus}
-            onRescheduleAppointment={handleRescheduleAppointment}
-            onCreateManualAppointment={handleCreateManualAppointment}
-            onExitAdmin={() => setCurrentView('home')}
-            onOpenAuthModal={() => setCurrentView('auth')}
+            onUpdateAppointmentStatus={
+              handleUpdateAppointmentStatus
+            }
+            onRescheduleAppointment={
+              handleRescheduleAppointment
+            }
+            onCreateManualAppointment={
+              handleCreateManualAppointment
+            }
+            onExitAdmin={() =>
+              setCurrentView('home')
+            }
+            onOpenAuthModal={() =>
+              setCurrentView('auth')
+            }
           />
         )}
 
       </main>
 
-      {/* Detail Modal for Services */}
+      {/* Service Details Modal */}
       <ServiceDetailModal
         service={selectedServiceForModal}
         isOpen={isDetailModalOpen}
-        onClose={() => setIsDetailModalOpen(false)}
+        onClose={() =>
+          setIsDetailModalOpen(false)
+        }
         onBook={handleBookService}
       />
 
       {/* Footer */}
       <Footer
         salonInfo={SALON_INFO}
-        onNavigateBooking={() => setCurrentView('booking')}
-        onNavigateServices={() => setCurrentView('services')}
+        onNavigateBooking={() =>
+          setCurrentView('booking')
+        }
+        onNavigateServices={() =>
+          setCurrentView('services')
+        }
       />
 
-      {/* Mobile Bottom Navigation Bar */}
+      {/* Mobile Bottom Navigation */}
       <MobileNav
         currentView={currentView}
         onNavigate={setCurrentView}
-        appointmentsCount={appointments.filter((a) => a.status === 'Confirmado').length}
+        appointmentsCount={
+          appointments.filter(
+            (appointment) =>
+              appointment.status === 'Confirmado'
+          ).length
+        }
       />
 
     </div>
