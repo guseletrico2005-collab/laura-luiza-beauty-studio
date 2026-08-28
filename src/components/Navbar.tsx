@@ -41,6 +41,7 @@ export const Navbar: React.FC<NavbarProps> = ({
       try {
         await navigator.share(shareData);
       } catch {
+        // Usuário cancelou ou o compartilhamento falhou
         copyToClipboard();
       }
     } else {
@@ -95,7 +96,6 @@ export const Navbar: React.FC<NavbarProps> = ({
       <div className="bg-[#9E4760] text-white text-xs py-1.5 px-4 text-center font-medium tracking-wide flex items-center justify-center gap-2">
         <span className="inline-flex items-center gap-1">
           <Sparkles className="w-3.5 h-3.5 text-[#F6D0DA]" />
-
           Atendimento personalizado com produtos de alta performance
         </span>
 
@@ -115,38 +115,26 @@ export const Navbar: React.FC<NavbarProps> = ({
             className="flex items-center gap-3 text-left group transition-transform active:scale-98"
           >
             <div className="w-11 h-11 rounded-full bg-gradient-to-tr from-[#9E4760] to-[#E8A7B8] p-0.5 shadow-sm shadow-[#9E4760]/20 flex items-center justify-center group-hover:shadow-md transition-all">
-
               <div className="w-full h-full bg-[#FCF9F7] rounded-full flex items-center justify-center text-[#9E4760]">
-
                 <Sparkles className="w-5 h-5 group-hover:rotate-12 transition-transform duration-300" />
-
               </div>
-
             </div>
 
             <div>
-
-              <div className="flex items-center gap-1.5">
-
-                <span className="font-serif text-xl sm:text-2xl font-bold tracking-tight text-[#3D1E28]">
-                  Laura Luíza Beauty
-                </span>
-
-              </div>
+              <span className="font-serif text-xl sm:text-2xl font-bold tracking-tight text-[#3D1E28]">
+                Laura Luíza Beauty
+              </span>
 
               <p className="text-[11px] uppercase tracking-widest text-[#A06D7B] font-medium hidden sm:block">
                 {salonInfo.slogan}
               </p>
-
             </div>
-
           </button>
 
           {/* NAVEGAÇÃO DESKTOP */}
           <nav className="hidden lg:flex items-center gap-1 bg-[#F5EBEF]/60 p-1.5 rounded-full border border-[#EEDCE2]">
 
             {navItems.map((item) => {
-
               const isActive = currentView === item.id;
 
               return (
@@ -160,19 +148,15 @@ export const Navbar: React.FC<NavbarProps> = ({
                       : 'text-[#6B4E58] hover:text-[#9E4760] hover:bg-white/50'
                   }`}
                 >
-
                   {item.icon}
 
-                  <span>
-                    {item.label}
-                  </span>
+                  <span>{item.label}</span>
 
                   {item.id === 'appointments' && appointmentsCount > 0 && (
                     <span className="w-5 h-5 bg-[#9E4760] text-white text-[10px] font-bold rounded-full flex items-center justify-center">
                       {appointmentsCount}
                     </span>
                   )}
-
                 </button>
               );
             })}
@@ -189,7 +173,6 @@ export const Navbar: React.FC<NavbarProps> = ({
               title="Compartilhar Studio"
               className="p-2.5 rounded-full border border-[#EAD3DC] text-[#7A505E] hover:text-[#9E4760] hover:bg-[#FBEFF2] transition-colors relative"
             >
-
               <Share2 className="w-4 h-4" />
 
               {shareSuccess && (
@@ -197,38 +180,30 @@ export const Navbar: React.FC<NavbarProps> = ({
                   Link copiado!
                 </span>
               )}
-
             </button>
 
-            {/* Minha conta */}
+            {/* Minha Conta */}
             <button
               id="header-auth-btn"
               onClick={() => onNavigate('auth')}
+              title="Minha Conta"
               className={`p-2.5 rounded-full border transition-colors ${
                 currentView === 'auth'
                   ? 'bg-[#9E4760] text-white border-[#9E4760]'
                   : 'border-[#EAD3DC] text-[#7A505E] hover:text-[#9E4760] hover:bg-[#FBEFF2] bg-white'
               }`}
-              title="Minha Conta"
             >
-
               <User className="w-4 h-4" />
-
             </button>
 
-            {/* Agendar */}
+            {/* Agendar Horário */}
             <button
               id="header-book-btn"
               onClick={() => onNavigate('booking')}
               className="px-5 py-2.5 rounded-full bg-gradient-to-r from-[#B54E6D] to-[#9E3D59] hover:from-[#9E3D59] hover:to-[#832D45] text-white text-sm font-semibold shadow-sm hover:shadow-md hover:shadow-[#9E4760]/25 transition-all transform active:scale-98 flex items-center gap-2"
             >
-
               <Calendar className="w-4 h-4" />
-
-              <span>
-                Agendar Horário
-              </span>
-
+              <span>Agendar Horário</span>
             </button>
 
           </div>
@@ -236,43 +211,40 @@ export const Navbar: React.FC<NavbarProps> = ({
           {/* AÇÕES MOBILE */}
           <div className="flex lg:hidden items-center gap-2">
 
+            {/* Compartilhar */}
             <button
               id="mobile-share-btn"
               onClick={handleShare}
-              className="p-2.5 rounded-full text-[#7A505E] bg-[#F5EBEF]/60 border border-[#EEDCE2]"
               title="Compartilhar"
+              className="p-2.5 rounded-full text-[#7A505E] bg-[#F5EBEF]/60 border border-[#EEDCE2]"
             >
-
               <Share2 className="w-4 h-4" />
-
             </button>
 
+            {/* Menu */}
             <button
               id="mobile-menu-toggle"
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
               className="p-2.5 rounded-xl text-[#7A505E] bg-[#F5EBEF]/80 border border-[#EEDCE2]"
               aria-label="Abrir Menu"
             >
-
               {mobileMenuOpen ? (
                 <X className="w-5 h-5" />
               ) : (
                 <Menu className="w-5 h-5" />
               )}
-
             </button>
 
           </div>
 
         </div>
-
       </div>
 
       {/* MENU MOBILE */}
       {mobileMenuOpen && (
         <div className="lg:hidden border-t border-[#F0E2E7] bg-[#FCF9F7] px-4 pt-3 pb-6 space-y-2 shadow-lg animate-in slide-in-from-top-2 duration-200">
 
-          {/* Cabeçalho do menu */}
+          {/* Cabeçalho */}
           <div className="flex items-center justify-between py-2 px-3 bg-[#FAF0F3] rounded-2xl mb-3">
 
             <div className="flex items-center gap-2.5">
@@ -282,7 +254,6 @@ export const Navbar: React.FC<NavbarProps> = ({
               </div>
 
               <div>
-
                 <p className="text-xs font-semibold text-[#3D1E28]">
                   Laura Luíza Beauty
                 </p>
@@ -290,7 +261,6 @@ export const Navbar: React.FC<NavbarProps> = ({
                 <p className="text-[10px] text-[#8C5D6C]">
                   Beleza, cuidado e autoestima
                 </p>
-
               </div>
 
             </div>
@@ -308,11 +278,10 @@ export const Navbar: React.FC<NavbarProps> = ({
 
           </div>
 
-          {/* Links principais */}
+          {/* LINKS PRINCIPAIS */}
           <div className="grid grid-cols-2 gap-2">
 
             {navItems.map((item) => (
-
               <button
                 key={item.id}
                 id={`drawer-link-${item.id}`}
@@ -326,23 +295,17 @@ export const Navbar: React.FC<NavbarProps> = ({
                     : 'bg-white border border-[#EEDCE2] text-[#6B4E58]'
                 }`}
               >
-
                 {item.icon}
-
-                <span>
-                  {item.label}
-                </span>
-
+                <span>{item.label}</span>
               </button>
-
             ))}
 
           </div>
 
-          {/* Ações */}
+          {/* AÇÕES DO MENU */}
           <div className="pt-2 flex flex-col gap-2">
 
-            {/* Minha conta */}
+            {/* Minha Conta */}
             <button
               id="drawer-account-btn"
               onClick={() => {
@@ -351,13 +314,8 @@ export const Navbar: React.FC<NavbarProps> = ({
               }}
               className="w-full flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl border border-[#D9BAC5] text-[#6B4E58] bg-white text-xs font-semibold"
             >
-
               <User className="w-4 h-4 text-[#9E4760]" />
-
-              <span>
-                Minha Conta
-              </span>
-
+              <span>Minha Conta</span>
             </button>
 
             {/* WhatsApp */}
@@ -367,13 +325,8 @@ export const Navbar: React.FC<NavbarProps> = ({
               rel="noopener noreferrer"
               className="w-full flex items-center justify-center gap-2 py-3 px-4 rounded-xl bg-[#25D366] text-white text-xs font-bold shadow-sm"
             >
-
               <Phone className="w-4 h-4" />
-
-              <span>
-                Falar no WhatsApp
-              </span>
-
+              <span>Falar no WhatsApp</span>
             </a>
 
           </div>
@@ -386,8 +339,3 @@ export const Navbar: React.FC<NavbarProps> = ({
 };
 ```
 
-
-    </header>
-  );
-};
-```
